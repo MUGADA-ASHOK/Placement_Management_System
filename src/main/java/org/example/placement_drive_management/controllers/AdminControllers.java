@@ -1,9 +1,7 @@
 package org.example.placement_drive_management.controllers;
 
 
-import org.example.placement_drive_management.dto.AdminDto;
-import org.example.placement_drive_management.dto.StudentDto;
-import org.example.placement_drive_management.dto.StudentProfileDto;
+import org.example.placement_drive_management.dto.*;
 import org.example.placement_drive_management.service.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +28,18 @@ public class AdminControllers {
     @GetMapping("/student/{rollNo}/profile")
     public ResponseEntity<StudentProfileDto> getStudentProfile(@PathVariable("rollNo") String rollNo) {
         return ResponseEntity.ok(adminService.getStudentProfileByRollNo(rollNo));
+    }
+    @PostMapping("/company/register")
+    public ResponseEntity<CompanyDto> registerCompany(@RequestBody CompanyDto companyDto) {
+         CompanyDto company = adminService.registerCompany(companyDto);
+         return ResponseEntity.ok(company);
+    }
+    @PostMapping("/company/addDrive")
+    public ResponseEntity<DriveDto> addDrive(@RequestBody DriveDto driveDto) {
+        return ResponseEntity.ok(adminService.createDrive(driveDto));
+    }
+    @PostMapping("/company/addDriveEligibility")
+    public ResponseEntity<EligibilityDto> createEligibility(@RequestBody EligibilityDto eligibilityDto) {
+            return ResponseEntity.ok(adminService.createEligibility(eligibilityDto));
     }
 }

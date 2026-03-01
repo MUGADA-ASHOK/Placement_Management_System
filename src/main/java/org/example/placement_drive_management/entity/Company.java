@@ -12,20 +12,23 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="company")
+@Entity
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(length=256)
-    private String companyCode;
+    @NotNull
+    @Column(unique = true)
+    private String companyId;
     private String companyName;
-    private Double minimumCgpa;
-    private Boolean hasHistoryBacklog;
-    private String description;
-    private String rollsOffered;
-    private String skills;
-    @OneToMany(mappedBy = "company")
-    private List<Applications> applications;
 
+    private String website;
+
+    private String industryType;
+
+    private String description;
+
+    private String externalApplicationLink;
+    @OneToMany(mappedBy = "company")
+    List<Drive> drives;
 }

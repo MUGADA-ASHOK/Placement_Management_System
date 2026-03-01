@@ -35,5 +35,5 @@ public class Student {
     private String password;
     @OneToOne(mappedBy = "student")
     private StudentProfile studentProfile;
-
+    private String role="user";
 }

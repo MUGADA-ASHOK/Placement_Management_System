@@ -1,8 +1,7 @@
 package org.example.placement_drive_management.service;
 
-import org.example.placement_drive_management.dto.AdminDto;
-import org.example.placement_drive_management.dto.StudentDto;
-import org.example.placement_drive_management.dto.StudentProfileDto;
+import org.example.placement_drive_management.dto.*;
+import org.example.placement_drive_management.entity.Company;
 import org.example.placement_drive_management.entity.Student;
 import org.springframework.stereotype.Service;
 
@@ -13,4 +12,8 @@ public interface AdminService {
     List<StudentDto> getAllStudents();
     String registerAdmin(AdminDto adminDto);
     StudentProfileDto getStudentProfileByRollNo(String rollNo);
+    CompanyDto registerCompany(CompanyDto companyDto);
+    DriveDto createDrive(DriveDto driveDto);
+    Company findCompanyById(String companyId);
+    EligibilityDto createEligibility(EligibilityDto eligibilityDto);
 }

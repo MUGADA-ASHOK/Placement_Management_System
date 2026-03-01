@@ -15,6 +15,8 @@ public class StudentProfileMapper {
         studentProfile.setTenthPercentage(studentProfileDto.getTenthPercentage());
         studentProfile.setDiplomaPercentage(studentProfileDto.getDiplomaPercentage());
         studentProfile.setTwelthPercentage(studentProfileDto.getTwelthPercentage());
+        studentProfile.setPassingYear(studentProfileDto.getPassingYear());
+        studentProfile.setGender(studentProfileDto.getGender());
         return studentProfile;
     }
 

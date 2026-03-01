@@ -31,7 +31,6 @@ public class StudentProfileServiceImpl implements StudentProfileService {
 
         StudentProfile studentProfile = new StudentProfile();
                 studentProfile.setStudent((student));
-                studentProfile.setId(studentProfileDto.getId());
                 studentProfile.setDepartment(studentProfileDto.getDepartment());
                 studentProfile.setCurrentSemester(studentProfileDto.getCurrentSemester());
                 studentProfile.setHasbackloghistory(studentProfileDto.getHasBacklogHistory());

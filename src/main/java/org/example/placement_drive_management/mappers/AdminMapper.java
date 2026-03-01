@@ -7,7 +7,7 @@ public class AdminMapper {
     public static AdminDto maptoAdminDto(Admin admin) {
         return new  AdminDto(
                 admin.getId(),
-                admin.getUsername(),
+                admin.getName(),
                 admin.getEmail(),
                 admin.getPassword()
         );
@@ -16,9 +16,10 @@ public class AdminMapper {
     public static Admin maptoAdmin(AdminDto adminDto) {
         return new  Admin(
                 adminDto.getId(),
-                adminDto.getUsername(),
+                adminDto.getName(),
                 adminDto.getEmail(),
-                adminDto.getPassword()
+                adminDto.getPassword(),
+                "admin"
         );
     }
 }

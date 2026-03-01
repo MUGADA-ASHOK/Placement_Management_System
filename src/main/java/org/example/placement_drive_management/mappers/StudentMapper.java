@@ -13,7 +13,9 @@ public class StudentMapper {
                 studentDto.getSurname(),
                 studentDto.getEmail(),
                 studentDto.getPassword(),
-                null
+                null,
+
+                "user"
 
         );
     }

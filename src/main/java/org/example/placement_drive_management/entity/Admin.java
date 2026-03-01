@@ -14,13 +14,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class Admin {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    private String username;
-    @Email(message = "Enter valid email")
+
+    private String name;
+
+    @Column(unique = true)
     private String email;
-    @Column(length=256)
+
     private String password;
+
+    private String role="admin"; // ROLE_ADMIN
 }

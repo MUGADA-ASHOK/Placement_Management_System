@@ -43,6 +43,7 @@ public class StudentProfile {
     @Max(value=55,message = "Enter Valid Semester ")
     private Integer backlogCount;
     private Boolean hasbackloghistory;
-
-
+    private Integer passingYear;
+    @Pattern(regexp = "^(MALE|FEMALE|OTHERS)",message = "Gender should be MALE|FEMALE|OTHERS")
+    private String gender;
 }

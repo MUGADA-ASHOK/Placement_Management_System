@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,21 +19,20 @@ public class Applications {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Pattern(regexp = "^(APPLIED|REJECTED|INPROCESS|SELECTED)$",message = "Application status must be APPLIED, REJECTED, INPROCESS, or SELECTED" )
+    private String status;
+    private Integer currentRoundNumber;
+
+    private Boolean externalApplied;
+
+    private LocalDate appliedDate;
 
     @ManyToOne
-    @JoinColumn(name = "student_roll_no",referencedColumnName = "rollNo")
+    @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "company_id",referencedColumnName = "id")
-    private Company company;
-
-    @Pattern(regexp = "^(APPLIED| SHORTLISTED| APTITUDE_CLEARED|TECHNICAL_CLEARED|HR_CLEARED|SELECTED|REJECTED)")
-    private String status;
-
-    private Integer currentRound;
-
-    private LocalDateTime appliedAt;
-
+    @JoinColumn(name = "drive_id")
+    private Drive drive;
 
 }
