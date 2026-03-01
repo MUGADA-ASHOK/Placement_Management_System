@@ -1,6 +1,7 @@
 package org.example.placement_drive_management.dto;
 
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Setter
