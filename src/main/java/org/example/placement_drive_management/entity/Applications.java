@@ -24,7 +24,7 @@ public class Applications {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id",referencedColumnName = "id")
     private Company company;
 
     @Pattern(regexp = "^(APPLIED| SHORTLISTED| APTITUDE_CLEARED|TECHNICAL_CLEARED|HR_CLEARED|SELECTED|REJECTED)")
@@ -34,5 +34,5 @@ public class Applications {
 
     private LocalDateTime appliedAt;
 
-    private Boolean offerAccepted;
+
 }

@@ -18,12 +18,15 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(length=256)
+    private String companyCode;
     private String companyName;
-    private String description;
-    private String rolesOffered;
-    private Double packageOffered;
     private Double minimumCgpa;
+    private Boolean hasHistoryBacklog;
+    private String description;
+    private String rollsOffered;
+    private String skills;
     @OneToMany(mappedBy = "company")
     private List<Applications> applications;
+
 
 }

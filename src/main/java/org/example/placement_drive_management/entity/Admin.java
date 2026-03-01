@@ -16,12 +16,11 @@ import lombok.Setter;
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @NotNull
     private String username;
     @Email(message = "Enter valid email")
     private String email;
     @Column(length=256)
     private String password;
-    private String role;
 }

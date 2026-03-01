@@ -10,6 +10,9 @@ import org.example.placement_drive_management.mappers.StudentResponseMapper;
 import org.example.placement_drive_management.repository.StudentRepository;
 import org.example.placement_drive_management.service.StudentService;
 import org.hibernate.annotations.SecondaryRow;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +22,14 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class StudentServiceImpl implements StudentService {
 private StudentRepository studentRepository;
-
+@Autowired
+PasswordEncoder passwordEncoder;
 
 @Override
     public StudentResponseDto createStudent(StudentDto studentDto) {
-        Student newStudent= studentRepository.save(StudentMapper.maptoStudent(studentDto));
+        Student student = StudentMapper.maptoStudent(studentDto);
+        student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
+        Student newStudent= studentRepository.save(student);
         return StudentResponseMapper.maptoStudentResponseDto(newStudent);
     }
 
@@ -33,8 +39,8 @@ private StudentRepository studentRepository;
     }
 
     @Override
-    public List<StudentDto> getAllStudents() {
-        List<StudentDto> studentdto=studentRepository.findAll().stream().map((student)->StudentMapper.maptoStudentDto(student)).collect(Collectors.toList());
+    public List<StudentResponseDto> getAllStudents() {
+        List<StudentResponseDto> studentdto=studentRepository.findAll().stream().map((student)->StudentResponseMapper.maptoStudentResponseDto(student)).collect(Collectors.toList());
         return studentdto;
     }
 

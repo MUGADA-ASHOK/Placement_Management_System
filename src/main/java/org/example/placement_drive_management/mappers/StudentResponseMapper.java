@@ -8,7 +8,8 @@ public class StudentResponseMapper {
         return new StudentResponseDto(
                 student.getRollNo(),
                 student.getName(),
-                student.getSurname()
+                student.getSurname(),
+                student.getEmail()
         );
     }
 }

@@ -13,4 +13,5 @@ public class StudentResponseDto {
     private String rollNo;
     private String name;
     private String surname;
+    private String email;
 }
