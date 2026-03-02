@@ -3,6 +3,7 @@ package org.example.placement_drive_management.controllers;
 
 import org.example.placement_drive_management.dto.StudentDto;
 import org.example.placement_drive_management.dto.StudentResponseDto;
+import org.example.placement_drive_management.entity.Applications;
 import org.example.placement_drive_management.entity.Student;
 import org.example.placement_drive_management.repository.StudentRepository;
 import org.example.placement_drive_management.service.StudentService;

@@ -34,6 +34,7 @@ public class DriveMapper {
                 driveDto.getRegistrationStartDate(),
                 driveDto.getRegistrationEndDate(),
                 driveDto.getIsActive(),
+                driveDto.getExternalLink(),
                 null,
                 driveDto.getDescription(),
                 null,

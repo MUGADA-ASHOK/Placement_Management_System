@@ -25,8 +25,9 @@ public class Eligibility {
     private String allowedBranch;
 
     private Integer passingYear;
-    @Pattern(regexp = "^(FEMALE|MALE|BOTH)",message = "not eligible")
+    @Pattern(regexp = "^(FEMALE|MALE|BOTH)$",message = "not eligible")
     private String gender;
+    private Boolean hasHistoryBacklogs;
     @OneToOne
     @JoinColumn(name = "drive_id",referencedColumnName = "driveId",nullable = false)
     private Drive drive;

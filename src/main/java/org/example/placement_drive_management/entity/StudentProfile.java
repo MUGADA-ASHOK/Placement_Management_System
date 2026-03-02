@@ -3,6 +3,9 @@ package org.example.placement_drive_management.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.example.placement_drive_management.dto.DriveDto;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,14 +18,14 @@ public class StudentProfile {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "student_roll_number", referencedColumnName = "rollNo")
+    @JoinColumn(name = "student_roll_number", referencedColumnName = "rollNo" ,unique = true)
     private Student student;
     @NonNull
-    @Pattern(regexp = "^(CSE|ECE|EEE|CHEM|IT|CSM|CSD|MECH|CIVIL)")
+    @Pattern(regexp = "^(CSE|ECE|EEE|CHEM|IT|CSM|CSD|MECH|CIVIL)$")
     private String department;
 
-    @Min(value=44,message = "Enter Valid 10th marks percentage")
-    @Max(value = 100,message = "Enter Valid 10th marks percentage")
+    @DecimalMin( value = "44.0",message = "Enter Valid 10th marks percentage")
+    @DecimalMax( value = "100.0" ,message = "Enter Valid 10th marks percentage")
     private Double tenthPercentage;
 
     @DecimalMin(value="44.0", message = "Enter Valid 10th marks percentage")
@@ -44,6 +47,8 @@ public class StudentProfile {
     private Integer backlogCount;
     private Boolean hasbackloghistory;
     private Integer passingYear;
-    @Pattern(regexp = "^(MALE|FEMALE|OTHERS)",message = "Gender should be MALE|FEMALE|OTHERS")
+    @Pattern(regexp = "^(MALE|FEMALE|OTHERS)$",message = "Gender should be MALE|FEMALE|OTHERS")
     private String gender;
+    @OneToMany(mappedBy = "studentProfile",cascade = CascadeType.ALL)
+    private List<Applications> applicationsList;
 }

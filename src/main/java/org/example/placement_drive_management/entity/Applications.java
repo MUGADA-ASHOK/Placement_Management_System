@@ -19,7 +19,7 @@ public class Applications {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Pattern(regexp = "^(APPLIED|REJECTED|INPROCESS|SELECTED)$",message = "Application status must be APPLIED, REJECTED, INPROCESS, or SELECTED" )
+    @Pattern(regexp = "^(ELIGIBLE|SHORTLISTED|APPLIED|REJECTED|INPROCESS|SELECTED)$",message = "Application status must be SHORTLISTED APPLIED, REJECTED, INPROCESS, or SELECTED" )
     private String status;
     private Integer currentRoundNumber;
 
@@ -34,5 +34,7 @@ public class Applications {
     @ManyToOne
     @JoinColumn(name = "drive_id")
     private Drive drive;
-
+    @ManyToOne
+    @JoinColumn(name = "student_profile")
+    private StudentProfile studentProfile;
 }

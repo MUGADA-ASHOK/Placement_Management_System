@@ -1,5 +1,6 @@
 package org.example.placement_drive_management.service.Impl;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.placement_drive_management.dto.*;
 import org.example.placement_drive_management.entity.*;
@@ -9,11 +10,13 @@ import org.example.placement_drive_management.repository.*;
 import org.example.placement_drive_management.service.AdminService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class AdminServiceImpl implements AdminService {
     private AdminRepository adminRepository;
     private StudentRepository studentRepository;
@@ -21,10 +24,17 @@ public class AdminServiceImpl implements AdminService {
     private CompanyRepository companyRepository;
     private DriveRepository driveRepository;
     private EligibilityRepository eligibilityRepository;
+    private DriveRoundRepository driveRoundRepository;
     @Override
     public List<StudentDto> getAllStudents() {
         return studentRepository.findAll().stream().map((students  )-> StudentMapper.maptoStudentDto(students)).collect(Collectors.toList());
     }
+    @Override
+    public List<StudentProfileDto> getAllProfiles() {
+        return studentProfileRepository.findAll().stream().map(StudentProfileMapper::maptoStudentProfileDto).collect(Collectors.toList());
+    }
+
+
 
     @Override
     public String registerAdmin(AdminDto adminDto) {
@@ -68,12 +78,45 @@ public class AdminServiceImpl implements AdminService {
                 eligibilityDto.getAllowedBranch(),
                 eligibilityDto.getPassingYear(),
                 eligibilityDto.getGender(),
+                eligibilityDto.getHasHistoryBacklogs(),
                 drive
         );
         drive.setEligibility(eligibility);
         eligibilityRepository.save(eligibility);
-
         return EligibilityMapper.mapToEligibilityDto(eligibility);
 
+    }
+
+    @Override
+    public String addDriveRound(DriveRoundDto driveRoundDto) {
+        DriveRound driveRound = driveRoundRepository.save(DriveRoundMapper.mapToDriveRound(driveRoundDto));
+        Drive drive = driveRepository.findByDriveId(driveRoundDto.getDriveId()).orElseThrow(()-> new ResourceNotFoundException("drive not found"));
+        driveRound.setDrive(drive);
+        return "Drive round added successfully";
+    }
+    @Override
+    public String publishDrivesToEligibleStudents(String driveId) {
+        int count=0;
+        Drive drive=driveRepository.findByDriveId(driveId).orElseThrow(()-> new ResourceNotFoundException("drive not found"));
+        Eligibility eligibility=eligibilityRepository.findByDriveId(driveId).orElseThrow(()->new ResourceNotFoundException("Drive Not Found"));
+        List<StudentProfile> profiles = studentProfileRepository.findAll();
+        for(StudentProfile profile:profiles){
+            if(eligibility.getAllowedBranch().contains(profile.getDepartment()) &&
+                    eligibility.getPassingYear().equals(profile.getPassingYear()) &&
+                            eligibility.getMinimumCgpa()<= profile.getCurrentCgpa() &&
+                            eligibility.getMaxActiveBacklogs()>=profile.getBacklogCount() &&
+                            ( eligibility.getGender().equals("BOTH") || eligibility.getGender().equals(profile.getGender())) &&
+                    (eligibility.getHasHistoryBacklogs() || !profile.getHasbackloghistory() )
+                    ){
+                  Applications application=new Applications();
+                  application.setStudent(profile.getStudent());
+                  application.setDrive(drive);
+                  application.setStatus("ELIGIBLE");
+                  drive.getApplications().add(application);
+                  profile.getApplicationsList().add(application);
+                  count+=1;
+            }
+        }
+        return "Drives published successfully for  = "+count+ "students";
     }
 }

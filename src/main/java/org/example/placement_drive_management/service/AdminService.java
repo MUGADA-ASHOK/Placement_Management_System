@@ -16,4 +16,7 @@ public interface AdminService {
     DriveDto createDrive(DriveDto driveDto);
     Company findCompanyById(String companyId);
     EligibilityDto createEligibility(EligibilityDto eligibilityDto);
+    String addDriveRound(DriveRoundDto driveRoundDto);
+    List<StudentProfileDto> getAllProfiles();
+    String publishDrivesToEligibleStudents(String driveId);
 }

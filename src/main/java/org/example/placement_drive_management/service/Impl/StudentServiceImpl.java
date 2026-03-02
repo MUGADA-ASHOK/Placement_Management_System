@@ -3,10 +3,13 @@ package org.example.placement_drive_management.service.Impl;
 import lombok.AllArgsConstructor;
 import org.example.placement_drive_management.dto.StudentDto;
 import org.example.placement_drive_management.dto.StudentResponseDto;
+import org.example.placement_drive_management.entity.Applications;
 import org.example.placement_drive_management.entity.Student;
+import org.example.placement_drive_management.entity.StudentProfile;
 import org.example.placement_drive_management.exceptions.ResourceNotFoundException;
 import org.example.placement_drive_management.mappers.StudentMapper;
 import org.example.placement_drive_management.mappers.StudentResponseMapper;
+import org.example.placement_drive_management.repository.StudentProfileRepository;
 import org.example.placement_drive_management.repository.StudentRepository;
 import org.example.placement_drive_management.service.StudentService;
 import org.hibernate.annotations.SecondaryRow;
@@ -24,8 +27,10 @@ public class StudentServiceImpl implements StudentService {
 private StudentRepository studentRepository;
 @Autowired
 PasswordEncoder passwordEncoder;
+    @Autowired
+    private StudentProfileRepository studentProfileRepository;
 
-@Override
+    @Override
     public StudentResponseDto createStudent(StudentDto studentDto) {
         Student student = StudentMapper.maptoStudent(studentDto);
         student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
@@ -43,5 +48,7 @@ PasswordEncoder passwordEncoder;
         List<StudentResponseDto> studentdto=studentRepository.findAll().stream().map((student)->StudentResponseMapper.maptoStudentResponseDto(student)).collect(Collectors.toList());
         return studentdto;
     }
+
+
 
 }

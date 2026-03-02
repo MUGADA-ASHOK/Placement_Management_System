@@ -31,6 +31,7 @@ public class Drive {
     private LocalDate registrationEndDate;
 
     private Boolean isActive;
+    private String externalLink;
 
     @ManyToOne
     @JoinColumn(name = "company_id",referencedColumnName = "companyId")
@@ -44,4 +45,6 @@ public class Drive {
 
     @OneToMany(mappedBy = "drive")
     private List<DriveRound> rounds;
+
+
 }
