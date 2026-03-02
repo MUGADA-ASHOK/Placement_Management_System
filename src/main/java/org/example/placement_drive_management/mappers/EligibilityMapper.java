@@ -12,6 +12,7 @@ public class EligibilityMapper {
                 eligibility.getAllowedBranch(),
                 eligibility.getPassingYear(),
                 eligibility.getGender(),
+                eligibility.getHasHistoryBacklogs(),
                 eligibility.getDrive().getDriveId()
         );
     }

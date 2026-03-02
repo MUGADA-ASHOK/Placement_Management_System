@@ -1,6 +1,7 @@
 package org.example.placement_drive_management.service.Impl;
 
 import org.example.placement_drive_management.dto.StudentProfileDto;
+import org.example.placement_drive_management.entity.Applications;
 import org.example.placement_drive_management.entity.Student;
 import org.example.placement_drive_management.entity.StudentProfile;
 import org.example.placement_drive_management.exceptions.ResourceNotFoundException;
@@ -9,6 +10,8 @@ import org.example.placement_drive_management.repository.StudentRepository;
 import org.example.placement_drive_management.service.StudentProfileService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @Service
 
@@ -39,6 +42,8 @@ public class StudentProfileServiceImpl implements StudentProfileService {
                 studentProfile.setTenthPercentage(studentProfileDto.getTenthPercentage());
                 studentProfile.setDiplomaPercentage(studentProfileDto.getDiplomaPercentage());
                 studentProfile.setTwelthPercentage(studentProfileDto.getTwelthPercentage());
+                studentProfile.setGender(studentProfileDto.getGender());
+                studentProfile.setPassingYear(studentProfileDto.getPassingYear());
         studentProfileRepository.save(studentProfile);
 
         return "Profile Created Successfully";
@@ -62,7 +67,8 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         existingProfile.setCurrentSemester(studentProfileDto.getCurrentSemester());
         existingProfile.setBacklogCount(studentProfileDto.getBacklogCount());
         existingProfile.setHasbackloghistory(studentProfileDto.getHasBacklogHistory());
-
+        existingProfile.setGender(studentProfileDto.getGender());
+        existingProfile.setPassingYear(studentProfileDto.getPassingYear());
         studentProfileRepository.save(existingProfile);
 
         return "Profile Updated Successfully";
@@ -82,7 +88,14 @@ public class StudentProfileServiceImpl implements StudentProfileService {
                 studentProfileDto.getCurrentCgpa(),
                 studentProfileDto.getCurrentSemester(),
                 studentProfileDto.getBacklogCount(),
-                studentProfileDto.getHasbackloghistory()
+                studentProfileDto.getHasbackloghistory(),
+                studentProfileDto.getPassingYear(),
+                studentProfileDto.getGender()
         );
+    }
+    @Override
+    public List<Applications> getAllApplicationsForStudent(String studentRollNo) {
+        StudentProfile studentProfile= studentProfileRepository.findByStudentRollNo(studentRollNo).orElseThrow(()->new ResourceNotFoundException("Student with Roll No :"+studentRollNo+"not found"));
+        return studentProfile.getApplicationsList();
     }
 }

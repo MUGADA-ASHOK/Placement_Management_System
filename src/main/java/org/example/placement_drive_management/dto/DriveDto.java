@@ -24,6 +24,7 @@ public class DriveDto {
     private LocalDate registrationStartDate;
     private LocalDate registrationEndDate;
     private Boolean isActive;
+    private String externalLink;
     private String companyId;
     private String description;
 

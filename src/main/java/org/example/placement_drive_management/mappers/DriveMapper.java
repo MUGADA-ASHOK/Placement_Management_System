@@ -18,6 +18,7 @@ public class DriveMapper {
                 drive.getRegistrationStartDate(),
                 drive.getRegistrationEndDate(),
                 drive.getIsActive(),
+                drive.getExternalLink(),
                 drive.getCompany().getCompanyId(),
                 drive.getDescription()
         );

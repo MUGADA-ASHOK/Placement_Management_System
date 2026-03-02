@@ -14,7 +14,7 @@ public class ApplicationsDto {
 
     private String studentRollNo;
 
-    private Long companyId;
+    private Long driveId;
 
     private String status;
 

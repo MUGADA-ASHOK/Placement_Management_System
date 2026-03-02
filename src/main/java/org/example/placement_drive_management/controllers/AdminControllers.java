@@ -13,6 +13,7 @@ import java.util.List;
 public class AdminControllers {
     private final AdminService adminService;
     public AdminControllers(AdminService adminService) {
+
         this.adminService = adminService;
     }
     @PostMapping("/register")
@@ -24,6 +25,10 @@ public class AdminControllers {
     @GetMapping("/allStudents")
     public ResponseEntity<List<StudentDto>> getAllStudents() {
         return ResponseEntity.ok(adminService.getAllStudents());
+    }
+    @GetMapping("/allStudentProfiles")
+    public ResponseEntity<List<StudentProfileDto>> getAllStudentProfiles() {
+        return ResponseEntity.ok(adminService.getAllProfiles());
     }
     @GetMapping("/student/{rollNo}/profile")
     public ResponseEntity<StudentProfileDto> getStudentProfile(@PathVariable("rollNo") String rollNo) {
@@ -42,4 +47,9 @@ public class AdminControllers {
     public ResponseEntity<EligibilityDto> createEligibility(@RequestBody EligibilityDto eligibilityDto) {
             return ResponseEntity.ok(adminService.createEligibility(eligibilityDto));
     }
+    @PostMapping("/publishDrives/{driveId}")
+    public ResponseEntity<String> publishDrives(@PathVariable("driveId") String driveId) {
+        return ResponseEntity.ok(adminService.publishDrivesToEligibleStudents(driveId));
+    }
+
 }

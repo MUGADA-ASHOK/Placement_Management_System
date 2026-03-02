@@ -16,5 +16,6 @@ public class EligibilityDto {
     private String allowedBranch;
     private Integer passingYear;
     private String gender;
+    private Boolean hasHistoryBacklogs;
     private String driveId;
 }
