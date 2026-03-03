@@ -1,6 +1,7 @@
 package org.example.placement_drive_management.controllers;
 
 
+import lombok.Getter;
 import org.example.placement_drive_management.dto.*;
 import org.example.placement_drive_management.service.AdminService;
 import org.springframework.http.ResponseEntity;
@@ -47,9 +48,13 @@ public class AdminControllers {
     public ResponseEntity<EligibilityDto> createEligibility(@RequestBody EligibilityDto eligibilityDto) {
             return ResponseEntity.ok(adminService.createEligibility(eligibilityDto));
     }
-    @PostMapping("/publishDrives/{driveId}")
+    @PutMapping("/publishDrives/{driveId}")
     public ResponseEntity<String> publishDrives(@PathVariable("driveId") String driveId) {
         return ResponseEntity.ok(adminService.publishDrivesToEligibleStudents(driveId));
+    }
+    @GetMapping("/company/{companyId}/drives")
+    public ResponseEntity<List<DriveDto>> getAllDrives(@PathVariable("companyId") String companyId) {
+        return ResponseEntity.ok(adminService.getAllDrives(companyId));
     }
 
 }

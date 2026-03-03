@@ -1,5 +1,6 @@
 package org.example.placement_drive_management.controllers;
 
+import org.example.placement_drive_management.dto.ApplicationsDto;
 import org.example.placement_drive_management.dto.StudentProfileDto;
 import org.example.placement_drive_management.entity.Applications;
 import org.example.placement_drive_management.service.StudentProfileService;
@@ -31,8 +32,8 @@ public class StudentProfileController {
         StudentProfileDto studentProfileDto = studentProfileService.getStudentProfile(rollNo);
         return ResponseEntity.ok(studentProfileDto);
     }
-    @GetMapping("/allApplications/{studentRollNo}")
-    public  ResponseEntity<List<Applications>> getAllApplicationsOfStudent(@PathVariable String studentRollNo){
+    @GetMapping("/allApplications/{rollNo}")
+    public  ResponseEntity<List<ApplicationsDto>> getAllApplicationsOfStudent(@PathVariable("rollNo") String studentRollNo){
         return ResponseEntity.ok(studentProfileService.getAllApplicationsForStudent(studentRollNo));
     }
 }

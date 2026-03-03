@@ -17,5 +17,4 @@ public class DriveRoundDto {
     private String roundName;
     private LocalDate roundDate;
     private String roundLink;
-    private String driveId;
 }

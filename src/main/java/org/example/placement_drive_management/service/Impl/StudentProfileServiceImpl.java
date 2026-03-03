@@ -1,10 +1,16 @@
 package org.example.placement_drive_management.service.Impl;
 
+import org.example.placement_drive_management.dto.ApplicationsDto;
+import org.example.placement_drive_management.dto.DriveRoundDto;
 import org.example.placement_drive_management.dto.StudentProfileDto;
 import org.example.placement_drive_management.entity.Applications;
+import org.example.placement_drive_management.entity.DriveRound;
 import org.example.placement_drive_management.entity.Student;
 import org.example.placement_drive_management.entity.StudentProfile;
 import org.example.placement_drive_management.exceptions.ResourceNotFoundException;
+import org.example.placement_drive_management.mappers.ApplicationsMapper;
+import org.example.placement_drive_management.mappers.DriveRoundMapper;
+import org.example.placement_drive_management.repository.ApplicationRepository;
 import org.example.placement_drive_management.repository.StudentProfileRepository;
 import org.example.placement_drive_management.repository.StudentRepository;
 import org.example.placement_drive_management.service.StudentProfileService;
@@ -12,6 +18,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -19,9 +26,11 @@ public class StudentProfileServiceImpl implements StudentProfileService {
 
     private final StudentProfileRepository studentProfileRepository;
     private final StudentRepository studentRepository;
-    public StudentProfileServiceImpl(StudentProfileRepository studentProfileRepository, StudentRepository studentRepository) {
+    private final ApplicationRepository applicationRepository;
+    public StudentProfileServiceImpl(StudentProfileRepository studentProfileRepository, StudentRepository studentRepository,ApplicationRepository applicationRepository) {
         this.studentProfileRepository = studentProfileRepository;
         this.studentRepository = studentRepository;
+        this.applicationRepository=applicationRepository;
     }
 
     @Override
@@ -94,8 +103,14 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         );
     }
     @Override
-    public List<Applications> getAllApplicationsForStudent(String studentRollNo) {
+    public List<ApplicationsDto> getAllApplicationsForStudent(String studentRollNo) {
         StudentProfile studentProfile= studentProfileRepository.findByStudentRollNo(studentRollNo).orElseThrow(()->new ResourceNotFoundException("Student with Roll No :"+studentRollNo+"not found"));
-        return studentProfile.getApplicationsList();
+        return studentProfile.getApplicationsList().stream().map(ApplicationsMapper::mapToApplicationDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DriveRoundDto> getAllDriveRoundsForStudent(String studentRollNo, String driveId) {
+        Applications application = applicationRepository.findByStudent_RollNo(studentRollNo).orElseThrow(()-> new ResourceNotFoundException("Application with Roll No :"+studentRollNo+"not found"));
+        return application.getDriveRounds().stream().map(DriveRoundMapper::mapToDriveRoundDto).collect(Collectors.toList());
     }
 }

@@ -23,7 +23,7 @@ public class DriveDto {
     private Integer vacancies;
     private LocalDate registrationStartDate;
     private LocalDate registrationEndDate;
-    private Boolean isActive;
+    private Boolean isActive=false;
     private String externalLink;
     private String companyId;
     private String description;

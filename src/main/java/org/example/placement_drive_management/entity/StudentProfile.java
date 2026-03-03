@@ -3,6 +3,7 @@ package org.example.placement_drive_management.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.example.placement_drive_management.dto.ApplicationsDto;
 import org.example.placement_drive_management.dto.DriveDto;
 
 import java.util.List;

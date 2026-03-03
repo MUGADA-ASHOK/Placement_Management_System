@@ -4,15 +4,13 @@ import org.example.placement_drive_management.dto.DriveRoundDto;
 import org.example.placement_drive_management.entity.DriveRound;
 
 public class DriveRoundMapper {
-    public static DriveRoundDto mapToDriveRound(DriveRound driveRound) {
+    public static DriveRoundDto mapToDriveRoundDto(DriveRound driveRound) {
         return new DriveRoundDto(
                 driveRound.getId(),
                 driveRound.getRoundNumber(),
                 driveRound.getRoundName(),
                 driveRound.getRoundDate(),
-                driveRound.getRoundLink(),
-                driveRound.getDrive().getDriveId()
-
+                driveRound.getRoundLink()
         );
     }
     public static DriveRound mapToDriveRound(DriveRoundDto driveRoundDto) {
@@ -22,6 +20,7 @@ public class DriveRoundMapper {
                 driveRoundDto.getRoundName(),
                 driveRoundDto.getRoundDate(),
                 driveRoundDto.getRoundLink(),
+                null,
                 null
         );
     }

@@ -25,6 +25,7 @@ public class AdminServiceImpl implements AdminService {
     private DriveRepository driveRepository;
     private EligibilityRepository eligibilityRepository;
     private DriveRoundRepository driveRoundRepository;
+    private ApplicationRepository applicationRepository;
     @Override
     public List<StudentDto> getAllStudents() {
         return studentRepository.findAll().stream().map((students  )-> StudentMapper.maptoStudentDto(students)).collect(Collectors.toList());
@@ -88,20 +89,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public String addDriveRound(DriveRoundDto driveRoundDto) {
-        DriveRound driveRound = driveRoundRepository.save(DriveRoundMapper.mapToDriveRound(driveRoundDto));
-        Drive drive = driveRepository.findByDriveId(driveRoundDto.getDriveId()).orElseThrow(()-> new ResourceNotFoundException("drive not found"));
-        driveRound.setDrive(drive);
-        return "Drive round added successfully";
-    }
-    @Override
     public String publishDrivesToEligibleStudents(String driveId) {
         int count=0;
         Drive drive=driveRepository.findByDriveId(driveId).orElseThrow(()-> new ResourceNotFoundException("drive not found"));
-        Eligibility eligibility=eligibilityRepository.findByDriveId(driveId).orElseThrow(()->new ResourceNotFoundException("Drive Not Found"));
+        if(!drive.getIsActive()) {
+            return "Eligible student has been published";
+        }
+        drive.setIsActive(true);
+        Eligibility eligibility=eligibilityRepository.findByDrive_DriveId(driveId).orElseThrow(()->new ResourceNotFoundException("Drive Not Found"));
         List<StudentProfile> profiles = studentProfileRepository.findAll();
         for(StudentProfile profile:profiles){
-            if(eligibility.getAllowedBranch().contains(profile.getDepartment()) &&
+            if(     eligibility.getAllowedBranch().contains(profile.getDepartment().toString()) &&
                     eligibility.getPassingYear().equals(profile.getPassingYear()) &&
                             eligibility.getMinimumCgpa()<= profile.getCurrentCgpa() &&
                             eligibility.getMaxActiveBacklogs()>=profile.getBacklogCount() &&
@@ -110,13 +108,21 @@ public class AdminServiceImpl implements AdminService {
                     ){
                   Applications application=new Applications();
                   application.setStudent(profile.getStudent());
+                  application.setStudentProfile(profile);
                   application.setDrive(drive);
                   application.setStatus("ELIGIBLE");
                   drive.getApplications().add(application);
                   profile.getApplicationsList().add(application);
                   count+=1;
+                  applicationRepository.save(application);
             }
         }
-        return "Drives published successfully for  = "+count+ "students";
+        return "Drives published successfully for  "+count+ " students";
+    }
+
+    @Override
+    public List<DriveDto> getAllDrives(String companyId) {
+        List<Drive> drives=companyRepository.findByCompanyId(companyId).orElseThrow(()->new ResourceNotFoundException("Comapny with companyId "+companyId +" not found")).getDrives();
+        return drives.stream().map(DriveMapper::maptoDriveDto).collect(Collectors.toList());
     }
 }

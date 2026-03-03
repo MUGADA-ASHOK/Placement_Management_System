@@ -25,4 +25,8 @@ public class DriveRound {
     @ManyToOne
     @JoinColumn(name = "drive_id",referencedColumnName = "driveId")
     private Drive drive;
+
+    @ManyToOne
+    @JoinColumn(name = "application_id")
+    private Applications applications;
 }
