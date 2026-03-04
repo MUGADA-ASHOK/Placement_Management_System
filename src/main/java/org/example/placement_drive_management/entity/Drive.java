@@ -30,7 +30,7 @@ public class Drive {
 
     private LocalDate registrationEndDate;
 
-    private Boolean isActive;
+    private Boolean isActive=false;
     private String externalLink;
 
     @ManyToOne
