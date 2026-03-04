@@ -1,6 +1,7 @@
 package org.example.placement_drive_management.controllers;
 
 import lombok.AllArgsConstructor;
+import org.example.placement_drive_management.dto.ApplicationsDto;
 import org.example.placement_drive_management.dto.DriveDto;
 import org.example.placement_drive_management.dto.DriveRoundDto;
 import org.example.placement_drive_management.service.CompanyService;
@@ -15,7 +16,7 @@ import java.util.List;
 public class CompanyController {
     private CompanyService companyService;
     @PostMapping("/publishDriveRound/{driveId}")
-    public ResponseEntity<String> publishDriveRound(@PathVariable String driveId, DriveRoundDto driveRoundDto) {
+    public ResponseEntity<String> publishDriveRound(@PathVariable String driveId, @RequestBody DriveRoundDto driveRoundDto) {
         return  ResponseEntity.ok(companyService.publishDriveRound(driveId,driveRoundDto));
     }
 
@@ -29,4 +30,13 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.getAllRounds(driveId));
     }
 
+    @GetMapping("/allApplications/{driveId}")
+    public ResponseEntity<List<ApplicationsDto>> getAllApplications(@PathVariable String driveId){
+        return ResponseEntity.ok(companyService.getAllApplications(driveId));
+    }
+
+    @GetMapping("/allApplications/{driveId}/{roundNumber}")
+    public ResponseEntity<List<ApplicationsDto>> getAllApplications(@PathVariable String driveId,@PathVariable Integer roundNumber){
+        return ResponseEntity.ok(companyService.getApplicantsForDriveRound(driveId,roundNumber));
+    }
 }

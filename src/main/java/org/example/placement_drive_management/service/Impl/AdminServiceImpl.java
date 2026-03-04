@@ -92,7 +92,7 @@ public class AdminServiceImpl implements AdminService {
     public String publishDrivesToEligibleStudents(String driveId) {
         int count=0;
         Drive drive=driveRepository.findByDriveId(driveId).orElseThrow(()-> new ResourceNotFoundException("drive not found"));
-        if(!drive.getIsActive()) {
+        if(drive.getIsActive()) {
             return "Eligible student has been published";
         }
         drive.setIsActive(true);
