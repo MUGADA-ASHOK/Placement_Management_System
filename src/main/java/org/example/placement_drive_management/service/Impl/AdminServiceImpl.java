@@ -34,25 +34,10 @@ public class AdminServiceImpl implements AdminService {
     public List<StudentProfileDto> getAllProfiles() {
         return studentProfileRepository.findAll().stream().map(StudentProfileMapper::maptoStudentProfileDto).collect(Collectors.toList());
     }
-
-
-
-    @Override
-    public String registerAdmin(AdminDto adminDto) {
-         adminRepository.save(AdminMapper.maptoAdmin(adminDto));
-         return "admin registered successfully";
-    }
-
     @Override
     public StudentProfileDto getStudentProfileByRollNo(String rollNo) {
         StudentProfile studentProfile = studentProfileRepository.findByStudentRollNo(rollNo).orElseThrow(()->new ResourceNotFoundException("Student with RollNo"+rollNo+" need to be uploaded"));
         return StudentProfileMapper.maptoStudentProfileDto(studentProfile);
-    }
-
-    @Override
-    public CompanyDto registerCompany(CompanyDto companyDto) {
-       return CompanyMapper.mapToCompanyDto(companyRepository.save(CompanyMapper.mapToCompany(companyDto)));
-
     }
 
     @Override

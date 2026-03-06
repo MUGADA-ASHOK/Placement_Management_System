@@ -3,6 +3,7 @@ package org.example.placement_drive_management.mappers;
 import org.example.placement_drive_management.dto.StudentDto;
 import org.example.placement_drive_management.dto.StudentProfileDto;
 import org.example.placement_drive_management.entity.Student;
+import org.example.placement_drive_management.enums.Role;
 
 public class StudentMapper {
     public static Student maptoStudent(StudentDto studentDto){
@@ -14,8 +15,7 @@ public class StudentMapper {
                 studentDto.getEmail(),
                 studentDto.getPassword(),
                 null,
-
-                "user"
+                Role.ROLE_STUDENT
 
         );
     }

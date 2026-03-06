@@ -3,6 +3,8 @@ package org.example.placement_drive_management.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,11 +24,15 @@ public class DriveRound {
     private LocalDate roundDate;
 
     private String roundLink;
+
+    private Double score;
+
+    // A round belongs to a drive
     @ManyToOne
-    @JoinColumn(name = "drive_id",referencedColumnName = "driveId")
+    @JoinColumn(name = "drive_id", referencedColumnName = "driveId")
     private Drive drive;
 
-    @ManyToOne
-    @JoinColumn(name = "application_id")
-    private Applications applications;
+    // Many rounds can have many applications (join table)
+    @ManyToMany(mappedBy = "driveRounds")
+    private List<Applications> applications = new ArrayList<>();
 }

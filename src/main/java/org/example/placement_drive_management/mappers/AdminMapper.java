@@ -2,6 +2,7 @@ package org.example.placement_drive_management.mappers;
 
 import org.example.placement_drive_management.dto.AdminDto;
 import org.example.placement_drive_management.entity.Admin;
+import org.example.placement_drive_management.enums.Role;
 
 public class AdminMapper {
     public static AdminDto maptoAdminDto(Admin admin) {
@@ -19,7 +20,7 @@ public class AdminMapper {
                 adminDto.getName(),
                 adminDto.getEmail(),
                 adminDto.getPassword(),
-                "admin"
+                Role.ROLE_ADMIN
         );
     }
 }

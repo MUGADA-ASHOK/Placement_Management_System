@@ -6,37 +6,49 @@ import org.example.placement_drive_management.dto.DriveDto;
 import org.example.placement_drive_management.dto.DriveRoundDto;
 import org.example.placement_drive_management.service.CompanyService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auth/company")
+@RequestMapping("/api/company")   // ← FIXED: was /api/auth/company
 @AllArgsConstructor
 public class CompanyController {
+
     private CompanyService companyService;
+
     @PostMapping("/publishDriveRound/{driveId}")
-    public ResponseEntity<String> publishDriveRound(@PathVariable String driveId, @RequestBody DriveRoundDto driveRoundDto) {
-        return  ResponseEntity.ok(companyService.publishDriveRound(driveId,driveRoundDto));
+    @PreAuthorize("hasAuthority('ROLE_COMPANY')")
+    public ResponseEntity<String> publishDriveRound(
+            @PathVariable String driveId,
+            @RequestBody DriveRoundDto driveRoundDto) {
+        return ResponseEntity.ok(companyService.publishDriveRound(driveId, driveRoundDto));
     }
 
     @GetMapping("/getAllDrives")
-    public ResponseEntity<List<DriveDto>> getAllDrives(){
+    @PreAuthorize("hasAuthority('ROLE_COMPANY')")
+    public ResponseEntity<List<DriveDto>> getAllDrives() {
         return ResponseEntity.ok(companyService.getAllDrives());
     }
 
     @GetMapping("/getRounds/{driveId}")
-    public ResponseEntity<List<DriveRoundDto>> getRounds(@PathVariable String driveId){
+    @PreAuthorize("hasAuthority('ROLE_COMPANY')")
+    public ResponseEntity<List<DriveRoundDto>> getRounds(@PathVariable String driveId) {
         return ResponseEntity.ok(companyService.getAllRounds(driveId));
     }
 
     @GetMapping("/allApplications/{driveId}")
-    public ResponseEntity<List<ApplicationsDto>> getAllApplications(@PathVariable String driveId){
+    @PreAuthorize("hasAuthority('ROLE_COMPANY')")
+    public ResponseEntity<List<ApplicationsDto>> getAllApplications(@PathVariable String driveId) {
         return ResponseEntity.ok(companyService.getAllApplications(driveId));
     }
 
     @GetMapping("/allApplications/{driveId}/{roundNumber}")
-    public ResponseEntity<List<ApplicationsDto>> getAllApplications(@PathVariable String driveId,@PathVariable Integer roundNumber){
-        return ResponseEntity.ok(companyService.getApplicantsForDriveRound(driveId,roundNumber));
+    @PreAuthorize("hasAuthority('ROLE_COMPANY')")
+    public ResponseEntity<List<ApplicationsDto>> getAllApplicationsByRound(
+            @PathVariable String driveId,
+            @PathVariable Integer roundNumber) {
+        return ResponseEntity.ok(companyService.getApplicantsForDriveRound(driveId, roundNumber));
     }
 }
