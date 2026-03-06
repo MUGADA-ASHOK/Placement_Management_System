@@ -1,13 +1,12 @@
 package org.example.placement_drive_management.service.Impl;
 
+import org.example.placement_drive_management.dto.ApplicationRoundDto;
 import org.example.placement_drive_management.dto.ApplicationsDto;
 import org.example.placement_drive_management.dto.DriveRoundDto;
 import org.example.placement_drive_management.dto.StudentProfileDto;
-import org.example.placement_drive_management.entity.Applications;
-import org.example.placement_drive_management.entity.DriveRound;
-import org.example.placement_drive_management.entity.Student;
-import org.example.placement_drive_management.entity.StudentProfile;
+import org.example.placement_drive_management.entity.*;
 import org.example.placement_drive_management.exceptions.ResourceNotFoundException;
+import org.example.placement_drive_management.mappers.ApplicationRoundMapper;
 import org.example.placement_drive_management.mappers.ApplicationsMapper;
 import org.example.placement_drive_management.mappers.DriveRoundMapper;
 import org.example.placement_drive_management.repository.ApplicationRepository;
@@ -108,9 +107,4 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         return studentProfile.getApplicationsList().stream().map(ApplicationsMapper::mapToApplicationDto).collect(Collectors.toList());
     }
 
-    @Override
-    public List<DriveRoundDto> getAllDriveRoundsForStudent(String studentRollNo, String driveId) {
-        Applications application = applicationRepository.findByStudent_RollNo(studentRollNo).orElseThrow(()-> new ResourceNotFoundException("Application with Roll No :"+studentRollNo+"not found"));
-        return application.getDriveRounds().stream().map(DriveRoundMapper::mapToDriveRoundDto).collect(Collectors.toList());
-    }
 }

@@ -43,12 +43,6 @@ public class Applications {
     @JoinColumn(name = "student_profile")
     private StudentProfile studentProfile;
 
-    // Applications OWNS the join table
-    @ManyToMany
-    @JoinTable(
-            name = "application_rounds",
-            joinColumns = @JoinColumn(name = "application_id"),
-            inverseJoinColumns = @JoinColumn(name = "drive_round_id")
-    )
-    private List<DriveRound> driveRounds = new ArrayList<>();
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+    private List<ApplicationRound> applicationRounds;
 }
