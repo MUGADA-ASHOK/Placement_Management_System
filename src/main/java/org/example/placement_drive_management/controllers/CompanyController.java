@@ -1,6 +1,7 @@
 package org.example.placement_drive_management.controllers;
 
 import lombok.AllArgsConstructor;
+import org.example.placement_drive_management.dto.ApplicationRoundDto;
 import org.example.placement_drive_management.dto.ApplicationsDto;
 import org.example.placement_drive_management.dto.DriveDto;
 import org.example.placement_drive_management.dto.DriveRoundDto;
@@ -46,7 +47,7 @@ public class CompanyController {
 
     @GetMapping("/allApplications/{driveId}/{roundNumber}")
     @PreAuthorize("hasAuthority('ROLE_COMPANY')")
-    public ResponseEntity<List<ApplicationsDto>> getAllApplicationsByRound(
+    public ResponseEntity<List<ApplicationRoundDto>> getAllApplicationsByRound(
             @PathVariable String driveId,
             @PathVariable Integer roundNumber) {
         return ResponseEntity.ok(companyService.getApplicantsForDriveRound(driveId, roundNumber));

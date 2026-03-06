@@ -66,18 +66,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Company registered successfully", response));
     }
-    @PostMapping("/comapny/login")
-    public ResponseEntity<ApiResponse<AuthResponse>> companyLogin(
-            @Valid @RequestBody LoginRequest request) {
-        AuthResponse response = authService.companyLogin(request);
-        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
-    }
-    @PostMapping("/admin/login")
-    public ResponseEntity<ApiResponse<AuthResponse>> adminLogin(
-            @Valid @RequestBody LoginRequest request) {
-        AuthResponse response = authService.adminLogin(request);
-        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
-    }
+
     // ── POST /api/auth/refresh ────────────────────────────────────
     /**
      * Call this when the access token has expired (you received a 401).

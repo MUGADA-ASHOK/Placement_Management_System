@@ -15,18 +15,8 @@ public interface ApplicationRepository extends JpaRepository<Applications, Long>
     Optional<List<Applications>> findByDrive_DriveId(String driveId);
 
     Optional<Applications> findByStudent_RollNo(String rollNo);
-
-    // DISTINCT prevents duplicate Applications from the ManyToMany JOIN
-    @Query("""
-        SELECT DISTINCT a FROM Applications a
-        JOIN a.driveRounds dr
-        WHERE a.drive.driveId = :driveId
-        AND dr.roundNumber = :roundNo
-    """)
-    List<Applications> findApplicantsByDriveIdAndRoundNo(
-            @Param("driveId") String driveId,
-            @Param("roundNo") Integer roundNo
+    Optional<Applications> findByDrive_DriveIdAndStudent_RollNo(
+            String driveId,
+            String rollNo
     );
-
-    List<Applications> findApplicantsByDriveIdAndStudent_RollNo(String driveId, String rollNo);
 }

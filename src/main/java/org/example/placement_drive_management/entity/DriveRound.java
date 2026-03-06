@@ -25,14 +25,11 @@ public class DriveRound {
 
     private String roundLink;
 
-    private Double score;
-
     // A round belongs to a drive
     @ManyToOne
     @JoinColumn(name = "drive_id", referencedColumnName = "driveId")
     private Drive drive;
 
-    // Many rounds can have many applications (join table)
-    @ManyToMany(mappedBy = "driveRounds")
-    private List<Applications> applications = new ArrayList<>();
+    @OneToMany(mappedBy = "driveRound")
+    private List<ApplicationRound> applicationRounds;
 }
