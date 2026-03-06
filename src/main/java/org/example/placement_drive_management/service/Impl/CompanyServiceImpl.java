@@ -89,5 +89,19 @@ public class CompanyServiceImpl implements CompanyService {
                 .map(ApplicationsMapper::mapToApplicationDto)
                 .toList();
     }
+    @Override
+    public String publishScoreForDriveRound(String driveId,String rollNo,Integer roundNo,Double score){
+        List<Applications> applications =
+                applicationRepository.findApplicantsByDriveIdAndStudent_RollNo(driveId, rollNo);
+        for(Applications applicant:applications){
+            List<DriveRound> driveRounds=applicant.getDriveRounds().stream().toList();
+            for(DriveRound dr:driveRounds){
+                if(dr.getRoundNumber().equals(roundNo)){
+                    dr.setScore(score);
+                }
+            }
+        }
+        return "Score Successfully published to RollNo: "+rollNo;
+    }
 
 }

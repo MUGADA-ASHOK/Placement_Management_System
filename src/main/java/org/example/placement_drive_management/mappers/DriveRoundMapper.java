@@ -10,7 +10,8 @@ public class DriveRoundMapper {
                 driveRound.getRoundNumber(),
                 driveRound.getRoundName(),
                 driveRound.getRoundDate(),
-                driveRound.getRoundLink()
+                driveRound.getRoundLink(),
+                driveRound.getScore()
         );
     }
     public static DriveRound mapToDriveRound(DriveRoundDto driveRoundDto) {
@@ -20,6 +21,7 @@ public class DriveRoundMapper {
                 driveRoundDto.getRoundName(),
                 driveRoundDto.getRoundDate(),
                 driveRoundDto.getRoundLink(),
+                driveRoundDto.getScore(),
                 null,
                 null
         );

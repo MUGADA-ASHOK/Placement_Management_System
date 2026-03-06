@@ -27,4 +27,6 @@ public interface ApplicationRepository extends JpaRepository<Applications, Long>
             @Param("driveId") String driveId,
             @Param("roundNo") Integer roundNo
     );
+
+    List<Applications> findApplicantsByDriveIdAndStudent_RollNo(String driveId, String rollNo);
 }
