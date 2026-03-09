@@ -14,4 +14,5 @@ public interface DriveRoundRepository extends JpaRepository<DriveRound, Long> {
     // Fetch the specific round definition for a drive + round number
     Optional<DriveRound> findByDrive_DriveIdAndRoundNumber(String driveId, Integer roundNumber);
     boolean existsByDriveAndRoundNumber(Drive drive, Integer roundNumber);
+    Boolean existsByDrive_DriveIdAndRoundNumber(String driveId,Integer roundNumber);
 }

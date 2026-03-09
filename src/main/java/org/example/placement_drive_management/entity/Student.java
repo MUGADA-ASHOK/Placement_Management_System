@@ -42,7 +42,7 @@ public class Student implements UserDetails {
     @NotNull
     @Column(length=256)
     private String password;
-    @OneToOne(mappedBy = "student")
+    @OneToOne(mappedBy = "student",cascade = CascadeType.ALL)
     private StudentProfile studentProfile;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

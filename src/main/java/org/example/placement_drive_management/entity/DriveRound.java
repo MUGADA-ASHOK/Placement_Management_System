@@ -30,6 +30,6 @@ public class DriveRound {
     @JoinColumn(name = "drive_id", referencedColumnName = "driveId")
     private Drive drive;
 
-    @OneToMany(mappedBy = "driveRound")
+    @OneToMany(mappedBy = "driveRound",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<ApplicationRound> applicationRounds;
 }

@@ -43,6 +43,6 @@ public class Applications {
     @JoinColumn(name = "student_profile")
     private StudentProfile studentProfile;
 
-    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<ApplicationRound> applicationRounds;
 }

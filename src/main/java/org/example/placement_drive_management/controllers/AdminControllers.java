@@ -60,4 +60,16 @@ public class AdminControllers {
     public ResponseEntity<List<DriveDto>> getAllDrives(@PathVariable("companyId") String companyId) {
         return ResponseEntity.ok(adminService.getAllDrives(companyId));
     }
+
+    @GetMapping("/allCompanies")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    public ResponseEntity<List<CompanyDto>> getAllCompanies() {
+        return ResponseEntity.ok(adminService.getAllCompanies());
+    }
+    @GetMapping("/allApplications/{rollNo}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    public ResponseEntity<List<ApplicationsDto>> getAllCompanies(@PathVariable String rollNo) {
+        return ResponseEntity.ok(adminService.getAllApplicationsForaStudent(rollNo));
+    }
+
 }

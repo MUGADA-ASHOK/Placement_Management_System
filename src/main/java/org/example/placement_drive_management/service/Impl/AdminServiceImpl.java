@@ -110,4 +110,15 @@ public class AdminServiceImpl implements AdminService {
         List<Drive> drives=companyRepository.findByCompanyId(companyId).orElseThrow(()->new ResourceNotFoundException("Comapny with companyId "+companyId +" not found")).getDrives();
         return drives.stream().map(DriveMapper::maptoDriveDto).collect(Collectors.toList());
     }
+    @Override
+    public List<CompanyDto> getAllCompanies() {
+        List<Company>companies = companyRepository.findAll();
+        return companies.stream().map(company -> CompanyMapper.mapCompanyToDto(company)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApplicationsDto> getAllApplicationsForaStudent(String rollNo) {
+        List<Applications> applications = applicationRepository.findByStudent_RollNo(rollNo);
+        return applications.stream().map(application-> ApplicationsMapper.mapToApplicationDto(application)).collect(Collectors.toList());
+    }
 }

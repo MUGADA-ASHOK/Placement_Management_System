@@ -45,7 +45,7 @@ public class Company implements UserDetails {
     @Column(nullable = false)
     private Role role = Role.ROLE_COMPANY;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company",orphanRemoval = true)
     List<Drive> drives=new ArrayList<>();
 
     // ── UserDetails ──────────────────────────────────────────────

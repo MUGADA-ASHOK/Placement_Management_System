@@ -17,4 +17,6 @@ public interface CompanyService {
     List<ApplicationsDto>getAllApplications(String driveId);
     List<ApplicationRoundDto>getApplicantsForDriveRound(String driveId, Integer roundNo);
     String publishScoreForDriveRound(String driveId,String rollNo,Integer roundNo,Double score);
+    String filterTopKStudents(String driveId,Integer roundNo,Integer topK);
+    String filterByCutOffMarks(String driveId,Integer roundNo,Double cutOffMarks);
 }

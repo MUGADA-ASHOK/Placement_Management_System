@@ -13,22 +13,6 @@ public interface ApplicationRoundRepository extends JpaRepository<ApplicationRou
 
 
     @Query("""
-        SELECT ar.application
-        FROM applicationRound ar
-        WHERE ar.driveRound.drive.driveId = :driveId
-        AND ar.driveRound.roundNumber = :roundNumber
-        AND ar.status = :status
-    """)
-
-     List<Applications> findClearedApplicationsFromPreviousRound(
-            String driveId,
-            Integer roundNumber,
-            String status
-    );
-
-
-
-    @Query("""
     SELECT ar
     FROM applicationRound ar
     JOIN FETCH ar.application a
@@ -43,4 +27,15 @@ public interface ApplicationRoundRepository extends JpaRepository<ApplicationRou
     );
 
 
-}
+    List<ApplicationRound> findByDriveRound_RoundNumber(Integer roundNumber);
+    Optional<ApplicationRound> findByApplication_IdAndDriveRound_RoundNumber(
+            Long applicationId, Integer roundNumber);
+
+    @Query("SELECT ar FROM applicationRound ar " +
+            "WHERE ar.driveRound.drive.driveId = :driveId " +
+            "AND ar.driveRound.roundNumber = :roundNo " +
+            "AND ar.score IS NOT NULL " +
+            "ORDER BY ar.score DESC")
+    List<ApplicationRound> findScoredStudentsOrderByScore(
+            @Param("driveId") String driveId,
+            @Param("roundNo") Integer roundNo);}

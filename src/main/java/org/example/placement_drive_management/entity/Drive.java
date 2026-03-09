@@ -37,13 +37,13 @@ public class Drive {
     @JoinColumn(name = "company_id",referencedColumnName = "companyId")
     private Company company;
     private String description;
-    @OneToOne(mappedBy = "drive", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "drive", cascade = CascadeType.ALL,orphanRemoval = true)
     private Eligibility eligibility;
 
-    @OneToMany(mappedBy = "drive")
+    @OneToMany(mappedBy = "drive", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Applications> applications;
 
-    @OneToMany(mappedBy = "drive")
+    @OneToMany(mappedBy = "drive", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<DriveRound> rounds;
 
 

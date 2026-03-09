@@ -1,5 +1,6 @@
 package org.example.placement_drive_management.service.Impl;
 
+import jakarta.transaction.Transactional;
 import org.example.placement_drive_management.dto.ApplicationRoundDto;
 import org.example.placement_drive_management.dto.ApplicationsDto;
 import org.example.placement_drive_management.dto.DriveRoundDto;
@@ -9,27 +10,31 @@ import org.example.placement_drive_management.exceptions.ResourceNotFoundExcepti
 import org.example.placement_drive_management.mappers.ApplicationRoundMapper;
 import org.example.placement_drive_management.mappers.ApplicationsMapper;
 import org.example.placement_drive_management.mappers.DriveRoundMapper;
-import org.example.placement_drive_management.repository.ApplicationRepository;
-import org.example.placement_drive_management.repository.StudentProfileRepository;
-import org.example.placement_drive_management.repository.StudentRepository;
+import org.example.placement_drive_management.repository.*;
 import org.example.placement_drive_management.service.StudentProfileService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-
+@Transactional
 public class StudentProfileServiceImpl implements StudentProfileService {
 
     private final StudentProfileRepository studentProfileRepository;
     private final StudentRepository studentRepository;
     private final ApplicationRepository applicationRepository;
-    public StudentProfileServiceImpl(StudentProfileRepository studentProfileRepository, StudentRepository studentRepository,ApplicationRepository applicationRepository) {
+    private final DriveRepository driveRepository;
+    private final ApplicationRoundRepository applicationRoundRepository;
+    public StudentProfileServiceImpl(StudentProfileRepository studentProfileRepository, StudentRepository studentRepository,ApplicationRepository applicationRepository,DriveRepository driveRepository, ApplicationRoundRepository applicationRoundRepository) {
         this.studentProfileRepository = studentProfileRepository;
         this.studentRepository = studentRepository;
         this.applicationRepository=applicationRepository;
+        this.driveRepository = driveRepository;
+        this.applicationRoundRepository=applicationRoundRepository;
     }
 
     @Override
@@ -107,4 +112,21 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         return studentProfile.getApplicationsList().stream().map(ApplicationsMapper::mapToApplicationDto).collect(Collectors.toList());
     }
 
+    @Override
+    public String applyDrive(String driveId,Student student) {
+        Applications application = applicationRepository.findByDrive_DriveIdAndStudent_RollNo(driveId,student.getRollNo()).orElseThrow(()-> new ResourceNotFoundException("application not found"));
+        if(application.getStatus().equals("applied")) {
+            return "You have already applied this application";
+        }
+        Drive drive = driveRepository.findByDriveId(driveId).orElseThrow(()->new ResourceNotFoundException("Drive with DriveId not found"));
+        if(!LocalDate.now().isBefore(drive.getRegistrationEndDate())) {
+            return "the application time is over";
+        }
+        application.setAppliedDate(LocalDate.now());
+        application.setCurrentRoundNumber(0);
+        application.setStatus("APPLIED");
+        application.setExternalApplied(false);
+        applicationRepository.save(application);
+        return "application applied for "+driveId+" successfully";
+    }
 }

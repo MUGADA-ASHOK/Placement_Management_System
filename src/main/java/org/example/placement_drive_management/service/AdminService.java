@@ -17,4 +17,6 @@ public interface AdminService {
     List<StudentProfileDto> getAllProfiles();
     String publishDrivesToEligibleStudents(String driveId);
     List<DriveDto> getAllDrives(String companyId);
+    List<CompanyDto> getAllCompanies();
+    List<ApplicationsDto> getAllApplicationsForaStudent(String rollNo);
 }

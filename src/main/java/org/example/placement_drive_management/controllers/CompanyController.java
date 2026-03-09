@@ -52,4 +52,23 @@ public class CompanyController {
             @PathVariable Integer roundNumber) {
         return ResponseEntity.ok(companyService.getApplicantsForDriveRound(driveId, roundNumber));
     }
+    @PostMapping("/publishScore/{driveId}/{rollNo}/{roundNo}/{score}")
+    @PreAuthorize("hasAuthority('ROLE_COMPANY')")
+    public ResponseEntity<String> publishScore(@PathVariable String driveId,@PathVariable String rollNo,@PathVariable Integer roundNo,@PathVariable Double score) {
+        return ResponseEntity.ok(companyService.publishScoreForDriveRound(driveId, rollNo, roundNo, score));
+    }
+
+
+    @PostMapping("/filterByTopK/{driveId}/{roundNo}/{topK}")
+    @PreAuthorize("hasAuthority('ROLE_COMPANY')")
+    public ResponseEntity<String> filterByTopKStudents(@PathVariable String driveId,@PathVariable  Integer roundNo,@PathVariable Integer topK) {
+        return ResponseEntity.ok(companyService.filterTopKStudents(driveId,roundNo,topK));
+    }
+    @PostMapping("/filterByCutOff/{driveId}/{roundNo}/{cutOff}")
+    @PreAuthorize("hasAuthority('ROLE_COMPANY')")
+    public ResponseEntity<String> filterByCutOff(@PathVariable String driveId,@PathVariable  Integer roundNo,@PathVariable Double cutOff) {
+        return ResponseEntity.ok(companyService.filterByCutOffMarks(driveId,roundNo,cutOff));
+    }
+
+
 }

@@ -50,6 +50,6 @@ public class StudentProfile {
     private Integer passingYear;
     @Pattern(regexp = "^(MALE|FEMALE|OTHERS)$",message = "Gender should be MALE|FEMALE|OTHERS")
     private String gender;
-    @OneToMany(mappedBy = "studentProfile",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "studentProfile",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Applications> applicationsList;
 }

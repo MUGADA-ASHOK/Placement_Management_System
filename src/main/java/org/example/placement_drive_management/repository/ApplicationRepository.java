@@ -12,11 +12,14 @@ import java.util.Optional;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Applications, Long> {
 
-    Optional<List<Applications>> findByDrive_DriveId(String driveId);
+    List<Applications> findByDrive_DriveId(String driveId);
 
-    Optional<Applications> findByStudent_RollNo(String rollNo);
+    List<Applications> findByStudent_RollNo(String rollNo);
     Optional<Applications> findByDrive_DriveIdAndStudent_RollNo(
             String driveId,
             String rollNo
     );
+    List<Applications> findByDrive_DriveIdAndStatus(String driveId, String status);
+    // All applications for a student filtered by status
+    List<Applications> findByStudent_RollNoAndStatus(String rollNo, String status);
 }
