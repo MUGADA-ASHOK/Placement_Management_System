@@ -119,6 +119,6 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<ApplicationsDto> getAllApplicationsForaStudent(String rollNo) {
         List<Applications> applications = applicationRepository.findByStudent_RollNo(rollNo);
-        return applications.stream().map(application-> ApplicationsMapper.mapToApplicationDto(application)).collect(Collectors.toList());
+        return applications.stream().map(ApplicationsMapper::mapToApplicationDto).collect(Collectors.toList());
     }
 }

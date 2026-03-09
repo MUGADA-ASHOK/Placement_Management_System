@@ -62,14 +62,18 @@ public class AdminControllers {
     }
 
     @GetMapping("/allCompanies")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<CompanyDto>> getAllCompanies() {
         return ResponseEntity.ok(adminService.getAllCompanies());
     }
     @GetMapping("/allApplications/{rollNo}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<ApplicationsDto>> getAllCompanies(@PathVariable String rollNo) {
         return ResponseEntity.ok(adminService.getAllApplicationsForaStudent(rollNo));
     }
-
+    @GetMapping("/allApplications/{rollNo}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    public ResponseEntity<List<ApplicationsDto>> getAllApplicationsForStudent(@PathVariable String rollNo) {
+        return ResponseEntity.ok(adminService.getAllApplicationsForaStudent(rollNo));
+    }
 }

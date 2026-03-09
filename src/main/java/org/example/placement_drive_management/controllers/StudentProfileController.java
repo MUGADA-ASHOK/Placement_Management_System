@@ -60,6 +60,4 @@ public class StudentProfileController {
     public ResponseEntity<String> applyDrive(@PathVariable String driveId, @AuthenticationPrincipal Student student) {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentProfileService.applyDrive(driveId,student));
     }
-
-
 }
