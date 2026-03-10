@@ -28,8 +28,8 @@ public class StudentProfileController {
     @PreAuthorize("hasAuthority('ROLE_STUDENT')")
     public ResponseEntity<String> addStudentProfile(
             @PathVariable String rollNo,
-            @RequestBody StudentProfileDto studentProfileDto) {
-        String message = studentProfileService.createStudentProfile(rollNo, studentProfileDto);
+            @RequestBody StudentProfileDto studentProfileDto,@AuthenticationPrincipal Student student) {
+        String message = studentProfileService.createStudentProfile(rollNo, studentProfileDto,student.getRollNo());
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 
@@ -37,27 +37,29 @@ public class StudentProfileController {
     @PreAuthorize("hasAuthority('ROLE_STUDENT')")
     public ResponseEntity<String> updateStudentProfile(
             @PathVariable String rollNo,
-            @RequestBody StudentProfileDto studentProfileDto) {
-        String message = studentProfileService.updateStudentProfile(rollNo, studentProfileDto);
+            @RequestBody StudentProfileDto studentProfileDto,
+            @AuthenticationPrincipal Student student) {
+        String message = studentProfileService.updateStudentProfile(rollNo, studentProfileDto,student.getRollNo());
         return ResponseEntity.ok(message);
     }
 
     @GetMapping("/{rollNo}")
     @PreAuthorize("hasAnyAuthority('ROLE_STUDENT', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<StudentProfileDto> getStudentProfile(@PathVariable String rollNo) {
-        return ResponseEntity.ok(studentProfileService.getStudentProfile(rollNo));
+    public ResponseEntity<StudentProfileDto> getStudentProfile(@PathVariable String rollNo,@AuthenticationPrincipal Student student) {
+        return ResponseEntity.ok(studentProfileService.getStudentProfile(rollNo,student.getRollNo()));
     }
 
     @GetMapping("/allApplications/{rollNo}")
     @PreAuthorize("hasAnyAuthority('ROLE_STUDENT', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<ApplicationsDto>> getAllApplicationsOfStudent(
-            @PathVariable("rollNo") String studentRollNo) {
-        return ResponseEntity.ok(studentProfileService.getAllApplicationsForStudent(studentRollNo));
+            @PathVariable("rollNo") String studentRollNo,
+            @AuthenticationPrincipal Student student) {
+        return ResponseEntity.ok(studentProfileService.getAllApplicationsForStudent(studentRollNo,student.getRollNo()));
     }
 
     @PostMapping("/applyDrive/{driveId}")
     @PreAuthorize("hasAuthority('ROLE_STUDENT')")
     public ResponseEntity<String> applyDrive(@PathVariable String driveId, @AuthenticationPrincipal Student student) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(studentProfileService.applyDrive(driveId,student));
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentProfileService.applyDrive(driveId,student.getRollNo()));
     }
 }

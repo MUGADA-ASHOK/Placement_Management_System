@@ -7,6 +7,7 @@ import org.example.placement_drive_management.service.AuthService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -41,6 +42,7 @@ public class AuthController {
     // ── POST /api/auth/register/admin ────────────────────────
 
     @PostMapping("/register/admin")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse<AuthResponse>> registerAdmin(
             @Valid @RequestBody RegisterAdminRequest request) {
 

@@ -46,6 +46,7 @@ public class StudentProfile {
     @Min(value=0,message = "Enter Valid Semester ")
     @Max(value=55,message = "Enter Valid Semester ")
     private Integer backlogCount;
+    @Column(nullable = false)
     private Boolean hasbackloghistory;
     private Integer passingYear;
     @Pattern(regexp = "^(MALE|FEMALE|OTHERS)$",message = "Gender should be MALE|FEMALE|OTHERS")

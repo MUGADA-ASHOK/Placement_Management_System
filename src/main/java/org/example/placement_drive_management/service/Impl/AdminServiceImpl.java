@@ -42,6 +42,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public DriveDto createDrive(DriveDto driveDto) {
+        if(driveRepository.existsByDriveId(driveDto.getDriveId())) {
+            return driveDto;
+        }
         Drive newdrive=DriveMapper.maptoDrive(driveDto);
         Company company=companyRepository.findByCompanyId(driveDto.getCompanyId()).orElseThrow(()->new ResourceNotFoundException("Company with id"+driveDto.getCompanyId()+" need to be uploaded"));
         newdrive.setCompany(company);
@@ -57,6 +60,9 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public EligibilityDto createEligibility(EligibilityDto eligibilityDto) {
         Drive drive = driveRepository.findByDriveId(eligibilityDto.getDriveId()).orElseThrow(()-> new ResourceNotFoundException("drive not found"));
+        if(eligibilityRepository.existsByDrive_DriveId(drive.getDriveId())) {
+            return updateEligibility(eligibilityDto);
+        }
         Eligibility eligibility=new  Eligibility(
                 eligibilityDto.getId(),
                 eligibilityDto.getMinimumCgpa(),
@@ -71,6 +77,23 @@ public class AdminServiceImpl implements AdminService {
         eligibilityRepository.save(eligibility);
         return EligibilityMapper.mapToEligibilityDto(eligibility);
 
+    }
+    @Override
+    public EligibilityDto updateEligibility(EligibilityDto eligibilityDto) {
+        Drive drive = driveRepository.findByDriveId(eligibilityDto.getDriveId()).orElseThrow(()-> new ResourceNotFoundException("drive not found"));
+        Eligibility eligibility=new  Eligibility(
+                eligibilityDto.getId(),
+                eligibilityDto.getMinimumCgpa(),
+                eligibilityDto.getMaxActiveBacklogs(),
+                eligibilityDto.getAllowedBranch(),
+                eligibilityDto.getPassingYear(),
+                eligibilityDto.getGender(),
+                eligibilityDto.getHasHistoryBacklogs(),
+                drive
+        );
+        drive.setEligibility(eligibility);
+        eligibilityRepository.save(eligibility);
+        return EligibilityMapper.mapToEligibilityDto(eligibility);
     }
 
     @Override

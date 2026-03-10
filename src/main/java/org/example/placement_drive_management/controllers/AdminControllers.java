@@ -48,6 +48,11 @@ public class AdminControllers {
     public ResponseEntity<EligibilityDto> createEligibility(@RequestBody EligibilityDto eligibilityDto) {
         return ResponseEntity.ok(adminService.createEligibility(eligibilityDto));
     }
+    @PostMapping("/company/updateDriveEligibility")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    public ResponseEntity<EligibilityDto> updateEligibility(@RequestBody EligibilityDto eligibilityDto) {
+        return ResponseEntity.ok(adminService.createEligibility(eligibilityDto));
+    }
 
     @PutMapping("/publishDrives/{driveId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
@@ -66,14 +71,10 @@ public class AdminControllers {
     public ResponseEntity<List<CompanyDto>> getAllCompanies() {
         return ResponseEntity.ok(adminService.getAllCompanies());
     }
-    @GetMapping("/allApplications/{rollNo}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<List<ApplicationsDto>> getAllCompanies(@PathVariable String rollNo) {
-        return ResponseEntity.ok(adminService.getAllApplicationsForaStudent(rollNo));
-    }
-    @GetMapping("/allApplications/{rollNo}")
+    @GetMapping("student/allApplications/{rollNo}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<ApplicationsDto>> getAllApplicationsForStudent(@PathVariable String rollNo) {
         return ResponseEntity.ok(adminService.getAllApplicationsForaStudent(rollNo));
     }
+
 }

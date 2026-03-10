@@ -19,5 +19,21 @@ public class StudentProfileMapper {
         studentProfile.setGender(studentProfileDto.getGender());
         return studentProfile;
     }
+    public static StudentProfile maptoStudentProfileDto(StudentProfileDto studentProfileDto){
+        StudentProfile studentProfile = new StudentProfile();
+        studentProfile.setId(studentProfileDto.getId());
+        studentProfile.setDepartment(studentProfileDto.getDepartment());
+        studentProfile.setCurrentSemester(studentProfileDto.getCurrentSemester());
+        studentProfile.setHasbackloghistory(studentProfileDto.getHasBacklogHistory());
+        studentProfile.setBacklogCount(studentProfileDto.getBacklogCount());
+        studentProfile.setCurrentCgpa(studentProfileDto.getCurrentCgpa());
+        studentProfile.setTenthPercentage(studentProfileDto.getTenthPercentage());
+        studentProfile.setDiplomaPercentage(studentProfileDto.getDiplomaPercentage());
+        studentProfile.setTwelthPercentage(studentProfileDto.getTwelthPercentage());
+        studentProfile.setPassingYear(studentProfileDto.getPassingYear());
+        studentProfile.setGender(studentProfileDto.getGender());
+        return studentProfile;
+    }
+
 
 }

@@ -7,11 +7,13 @@ import org.example.placement_drive_management.dto.DriveRoundDto;
 import org.example.placement_drive_management.dto.StudentProfileDto;
 import org.example.placement_drive_management.entity.*;
 import org.example.placement_drive_management.exceptions.ResourceNotFoundException;
+import org.example.placement_drive_management.exceptions.UnauthorizedAccessException;
 import org.example.placement_drive_management.mappers.ApplicationRoundMapper;
 import org.example.placement_drive_management.mappers.ApplicationsMapper;
 import org.example.placement_drive_management.mappers.DriveRoundMapper;
 import org.example.placement_drive_management.repository.*;
 import org.example.placement_drive_management.service.StudentProfileService;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -37,9 +39,16 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         this.applicationRoundRepository=applicationRoundRepository;
     }
 
+    public void verifyStudent(String rollNo,String rollNumberInContext) {
+        if(rollNo!=null&&rollNumberInContext!=null) {
+            if(!rollNo.equals(rollNumberInContext)) {
+                throw  new UnauthorizedAccessException("you do not have permission to add profile");
+            }
+        }
+    }
     @Override
-    public String createStudentProfile(String rollNo, StudentProfileDto studentProfileDto) {
-
+    public String createStudentProfile(String rollNo, StudentProfileDto studentProfileDto,String  rollNumberInContext) {
+        verifyStudent(rollNo,rollNumberInContext);
         Student student = studentRepository.findByRollNo(rollNo)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Student with RollNo "
@@ -64,7 +73,8 @@ public class StudentProfileServiceImpl implements StudentProfileService {
 
     @Override
     public String updateStudentProfile(String rollNo,
-                                       StudentProfileDto studentProfileDto) {
+                                       StudentProfileDto studentProfileDto,String   rollNumberInContext) {
+        verifyStudent(rollNo,rollNumberInContext);
 
         StudentProfile existingProfile =
                 studentProfileRepository.findByStudentRollNo(rollNo)
@@ -87,7 +97,8 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         return "Profile Updated Successfully";
     }
     @Override
-    public StudentProfileDto getStudentProfile(String rollNo) {
+    public StudentProfileDto getStudentProfile(String rollNo,String rollNumberInContext) {
+        verifyStudent(rollNo,rollNumberInContext);
         StudentProfile studentProfileDto=studentProfileRepository.findByStudentRollNo(rollNo)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Student with RollNo "
@@ -107,19 +118,20 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         );
     }
     @Override
-    public List<ApplicationsDto> getAllApplicationsForStudent(String studentRollNo) {
+    public List<ApplicationsDto> getAllApplicationsForStudent(String studentRollNo,String  rollNumberInContext) {
+        verifyStudent(studentRollNo,rollNumberInContext);
         StudentProfile studentProfile= studentProfileRepository.findByStudentRollNo(studentRollNo).orElseThrow(()->new ResourceNotFoundException("Student with Roll No :"+studentRollNo+"not found"));
         return studentProfile.getApplicationsList().stream().map(ApplicationsMapper::mapToApplicationDto).collect(Collectors.toList());
     }
 
     @Override
-    public String applyDrive(String driveId,Student student) {
-        Applications application = applicationRepository.findByDrive_DriveIdAndStudent_RollNo(driveId,student.getRollNo()).orElseThrow(()-> new ResourceNotFoundException("application not found"));
+    public String applyDrive(String driveId,String rollNo) {
+        Applications application = applicationRepository.findByDrive_DriveIdAndStudent_RollNo(driveId,rollNo).orElseThrow(()-> new ResourceNotFoundException("application not found"));
         if(application.getStatus().equals("applied")) {
             return "You have already applied this application";
         }
         Drive drive = driveRepository.findByDriveId(driveId).orElseThrow(()->new ResourceNotFoundException("Drive with DriveId not found"));
-        if(!LocalDate.now().isBefore(drive.getRegistrationEndDate())) {
+        if(!LocalDate.now().isBefore(drive.getRegistrationEndDate()) || !LocalDate.now().isAfter(drive.getRegistrationStartDate())) {
             return "the application time is over";
         }
         application.setAppliedDate(LocalDate.now());

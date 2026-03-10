@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface EligibilityRepository extends JpaRepository<Eligibility,Long> {
     Optional<Eligibility> findByDrive_DriveId(String drive);
-
+    Boolean existsByDrive_DriveId(String driveId);
 }

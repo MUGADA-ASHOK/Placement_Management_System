@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DriveRoundRepository extends JpaRepository<DriveRound, Long> {
-    Optional<List<DriveRound>> findByDrive_DriveId(String driveId);
+    List<DriveRound> findByDrive_DriveId(String driveId);
     // Fetch the specific round definition for a drive + round number
     Optional<DriveRound> findByDrive_DriveIdAndRoundNumber(String driveId, Integer roundNumber);
     boolean existsByDriveAndRoundNumber(Drive drive, Integer roundNumber);
