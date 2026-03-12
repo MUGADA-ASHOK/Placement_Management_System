@@ -29,7 +29,7 @@ public class Drive {
     private LocalDate registrationStartDate;
 
     private LocalDate registrationEndDate;
-
+    private Integer maxRounds;
     private Boolean isActive=false;
     private String externalLink;
 

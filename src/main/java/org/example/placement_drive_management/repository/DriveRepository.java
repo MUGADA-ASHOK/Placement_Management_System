@@ -11,4 +11,5 @@ public interface DriveRepository extends JpaRepository<Drive,Long> {
     Optional<Drive> findByDriveId(String driveId);
     Boolean existsByDriveId(String driveId);
     List<Drive> findByCompany_CompanyId(String companyId);
+    List<Drive> findAllByIsActive(Boolean active);
 }

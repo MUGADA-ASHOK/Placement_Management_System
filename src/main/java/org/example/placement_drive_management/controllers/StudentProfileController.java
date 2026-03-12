@@ -24,12 +24,11 @@ public class StudentProfileController {
         this.studentProfileService = studentProfileService;
     }
 
-    @PostMapping("/add/{rollNo}")
+    @PostMapping("/add")
     @PreAuthorize("hasAuthority('ROLE_STUDENT')")
     public ResponseEntity<String> addStudentProfile(
-            @PathVariable String rollNo,
             @RequestBody StudentProfileDto studentProfileDto,@AuthenticationPrincipal Student student) {
-        String message = studentProfileService.createStudentProfile(rollNo, studentProfileDto,student.getRollNo());
+        String message = studentProfileService.createStudentProfile(studentProfileDto,student.getRollNo());
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 

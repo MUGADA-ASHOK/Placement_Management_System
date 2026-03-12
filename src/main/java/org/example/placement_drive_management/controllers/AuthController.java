@@ -50,7 +50,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Admin registered successfully", response));
     }
-
     // ── POST /api/auth/login ──────────────────────────────────────
 
     @PostMapping("/login")

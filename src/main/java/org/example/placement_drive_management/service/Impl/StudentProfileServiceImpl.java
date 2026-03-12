@@ -39,16 +39,8 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         this.applicationRoundRepository=applicationRoundRepository;
     }
 
-    public void verifyStudent(String rollNo,String rollNumberInContext) {
-        if(rollNo!=null&&rollNumberInContext!=null) {
-            if(!rollNo.equals(rollNumberInContext)) {
-                throw  new UnauthorizedAccessException("you do not have permission to add profile");
-            }
-        }
-    }
     @Override
-    public String createStudentProfile(String rollNo, StudentProfileDto studentProfileDto,String  rollNumberInContext) {
-        verifyStudent(rollNo,rollNumberInContext);
+    public String createStudentProfile( StudentProfileDto studentProfileDto,String  rollNo) {
         Student student = studentRepository.findByRollNo(rollNo)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Student with RollNo "
@@ -71,10 +63,11 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         return "Profile Created Successfully";
     }
 
+
+
     @Override
-    public String updateStudentProfile(String rollNo,
-                                       StudentProfileDto studentProfileDto,String   rollNumberInContext) {
-        verifyStudent(rollNo,rollNumberInContext);
+    public String updateStudentProfile(
+                                       StudentProfileDto studentProfileDto,String rollNo) {
 
         StudentProfile existingProfile =
                 studentProfileRepository.findByStudentRollNo(rollNo)
@@ -97,8 +90,7 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         return "Profile Updated Successfully";
     }
     @Override
-    public StudentProfileDto getStudentProfile(String rollNo,String rollNumberInContext) {
-        verifyStudent(rollNo,rollNumberInContext);
+    public StudentProfileDto getStudentProfile(String rollNo) {
         StudentProfile studentProfileDto=studentProfileRepository.findByStudentRollNo(rollNo)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Student with RollNo "
@@ -118,8 +110,7 @@ public class StudentProfileServiceImpl implements StudentProfileService {
         );
     }
     @Override
-    public List<ApplicationsDto> getAllApplicationsForStudent(String studentRollNo,String  rollNumberInContext) {
-        verifyStudent(studentRollNo,rollNumberInContext);
+    public List<ApplicationsDto> getAllApplicationsForStudent(String  studentRollNo) {
         StudentProfile studentProfile= studentProfileRepository.findByStudentRollNo(studentRollNo).orElseThrow(()->new ResourceNotFoundException("Student with Roll No :"+studentRollNo+"not found"));
         return studentProfile.getApplicationsList().stream().map(ApplicationsMapper::mapToApplicationDto).collect(Collectors.toList());
     }

@@ -13,9 +13,9 @@ import java.util.List;
 
 @Service
 public interface StudentProfileService {
-    String createStudentProfile(String rollNo, StudentProfileDto studentProfileDto,String rollNumberInContext);
-    String updateStudentProfile(String RollNo,StudentProfileDto studentProfileDto,String rollNumberInContext);
-    StudentProfileDto getStudentProfile(String rollNo,String rollNumberInContext);
-    List<ApplicationsDto> getAllApplicationsForStudent(String studentRollNo,String rollNumberInContext);
+    String createStudentProfile(StudentProfileDto studentProfileDto,String rollNumberInContext);
+    String updateStudentProfile(StudentProfileDto studentProfileDto,String rollNumberInContext);
+    StudentProfileDto getStudentProfile(String rollNumberInContext);
+    List<ApplicationsDto> getAllApplicationsForStudent(String rollNumberInContext);
     String applyDrive(String driveId, String rollNoInContext);
 }

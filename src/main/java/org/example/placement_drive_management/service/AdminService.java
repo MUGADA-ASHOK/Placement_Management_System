@@ -1,10 +1,13 @@
 package org.example.placement_drive_management.service;
 
 import org.example.placement_drive_management.dto.*;
+import org.example.placement_drive_management.dto.auth.ApiResponse;
 import org.example.placement_drive_management.entity.Company;
+import org.example.placement_drive_management.entity.Drive;
 import org.example.placement_drive_management.entity.Student;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -12,12 +15,21 @@ public interface AdminService {
     List<StudentDto> getAllStudents();
     StudentProfileDto getStudentProfileByRollNo(String rollNo);
     DriveDto createDrive(DriveDto driveDto);
-    Company findCompanyById(String companyId);
-    EligibilityDto createEligibility(EligibilityDto eligibilityDto);
-    EligibilityDto updateEligibility(EligibilityDto eligibilityDto);
+    String createEligibility(EligibilityDto eligibilityDto);
+    String updateEligibility(String driveId,EligibilityDto eligibilityDto);
     List<StudentProfileDto> getAllProfiles();
     String publishDrivesToEligibleStudents(String driveId);
     List<DriveDto> getAllDrives(String companyId);
     List<CompanyDto> getAllCompanies();
     List<ApplicationsDto> getAllApplicationsForaStudent(String rollNo);
+    String closeDrive(String driveId);
+
+    List<DriveRoundDto> getAllRounds(String driveId);  // ← added companyId
+
+    List<ApplicationsDto> getAllApplications(String driveId);
+
+    List<ApplicationRoundDto> getApplicantsForDriveRound(String driveId, Integer roundNo);  // ← added companyId
+    List<DriveDto>viewAllActiveDrives();
+    String removeDrive(String driveId);
+    String extendDriveApplication(String driveId, LocalDate localDate);
 }

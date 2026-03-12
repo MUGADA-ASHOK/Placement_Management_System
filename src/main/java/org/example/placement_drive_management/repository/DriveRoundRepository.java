@@ -15,4 +15,5 @@ public interface DriveRoundRepository extends JpaRepository<DriveRound, Long> {
     Optional<DriveRound> findByDrive_DriveIdAndRoundNumber(String driveId, Integer roundNumber);
     boolean existsByDriveAndRoundNumber(Drive drive, Integer roundNumber);
     Boolean existsByDrive_DriveIdAndRoundNumber(String driveId,Integer roundNumber);
+    Integer findMaxRoundNumberByDriveId(String driveId);
 }

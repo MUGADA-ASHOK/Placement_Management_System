@@ -96,4 +96,14 @@ public class CompanyController {
         return ResponseEntity.ok(
                 ApiResponse.success("Cutoff filter applied successfully", companyService.filterByCutOffMarks(driveId, roundNo, cutOff, company.getCompanyId())));
     }
+
+    @GetMapping("/countFilterByCutOff/{driveId}/{roundNo}/{cutOff}")
+    @PreAuthorize("hasAuthority('ROLE_COMPANY')")
+    public ResponseEntity<ApiResponse<Integer>> countFilterByCutOff( @PathVariable String driveId,
+                                                                    @PathVariable Integer roundNo,
+                                                                    @PathVariable Double cutOff,
+                                                                    @AuthenticationPrincipal Company company) {
+        return ResponseEntity.ok(ApiResponse.success("count by cutOff marks: ",companyService.countFilterByCutOffMarks(driveId, roundNo, cutOff, company.getCompanyId())));
+    }
+
 }

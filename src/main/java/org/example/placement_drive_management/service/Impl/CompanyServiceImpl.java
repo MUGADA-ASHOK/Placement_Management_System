@@ -44,6 +44,9 @@ public class CompanyServiceImpl implements CompanyService {
                     "You do not have permission to access this drive.");
         }
     }
+    private void closeIfFinalRound(Drive drive) {
+        drive.setIsActive(false);
+    }
 
     @Override
     public String publishDriveRound(String driveId, DriveRoundDto dto, String companyId) {
@@ -170,17 +173,21 @@ public class CompanyServiceImpl implements CompanyService {
             throw new IllegalArgumentException(
                     "Invalid topK. Must be between 1 and " + studentApplications.size());
         }
-
         List<ApplicationRound> roundsToUpdate = new ArrayList<>();
         List<Applications> applicationsToUpdate = new ArrayList<>();
-
+        Drive drive = driveRepository.findByDriveId(driveId).orElseThrow(() -> new ResourceNotFoundException("Drive not found for drive id: " + driveId));
+        if(drive.getMaxRounds().equals(roundNo)) {
+            closeIfFinalRound(drive);
+        }
+        String appRoundstatus = drive.getMaxRounds().equals(roundNo)? "SELECTED":"CLEARED";
+        String appStatus = drive.getMaxRounds().equals(roundNo)? "SELECTED":"INPROCESS";
         for (int i = 0; i < studentApplications.size(); i++) {
             ApplicationRound appRound = studentApplications.get(i);
             Applications application = appRound.getApplication();
 
             if (i < topK) {
-                appRound.setStatus("CLEARED");
-                application.setStatus("INPROCESS");
+                appRound.setStatus(appRoundstatus);
+                application.setStatus(appStatus);
             } else {
                 appRound.setStatus("FAILED");
                 application.setStatus("REJECTED");
@@ -208,7 +215,12 @@ public class CompanyServiceImpl implements CompanyService {
         if (studentApplications.isEmpty()) {
             throw new ResourceNotFoundException("No scored students found for this round.");
         }
-
+        Drive drive = driveRepository.findByDriveId(driveId).orElseThrow(() -> new ResourceNotFoundException("Drive not found for drive id: " + driveId));
+        if(drive.getMaxRounds().equals(roundNo)) {
+            closeIfFinalRound(drive);
+        }
+        String appRoundstatus = drive.getMaxRounds().equals(roundNo)? "SELECTED":"CLEARED";
+        String appStatus = drive.getMaxRounds().equals(roundNo)? "SELECTED":"INPROCESS";
         List<ApplicationRound> roundsToUpdate = new ArrayList<>();
         List<Applications> applicationsToUpdate = new ArrayList<>();
         int cleared = 0, failed = 0;
@@ -217,8 +229,8 @@ public class CompanyServiceImpl implements CompanyService {
             Applications application = appRound.getApplication();
 
             if (appRound.getScore() >= cutOff) {
-                appRound.setStatus("CLEARED");
-                application.setStatus("INPROCESS");
+                appRound.setStatus(appRoundstatus);
+                application.setStatus(appStatus);
                 cleared++;
             } else {
                 appRound.setStatus("FAILED");
@@ -234,5 +246,21 @@ public class CompanyServiceImpl implements CompanyService {
         applicationRepository.saveAll(applicationsToUpdate);
 
         return "Cutoff: " + cutOff + " | Cleared: " + cleared + " | Failed: " + failed;
+    }
+
+    @Override
+    public Integer countFilterByCutOffMarks(String driveId, Integer roundNo, Double cutOffMarks, String companyId) {
+        verifyDriveOwnership(driveId, companyId);
+        List<ApplicationRound>applicationRounds = applicationRoundRepository.findScoredStudentsOrderByScore(driveId, roundNo);
+        int count = 0;
+        for (ApplicationRound applicationRound : applicationRounds) {
+            if(applicationRound.getScore() >= cutOffMarks) {
+                count++;
+            }
+            else{
+                break;
+            }
+        }
+        return count;
     }
 }

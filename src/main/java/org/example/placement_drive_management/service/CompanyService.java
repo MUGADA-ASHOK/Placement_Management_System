@@ -24,4 +24,5 @@ public interface CompanyService {
     String filterTopKStudents(String driveId, Integer roundNo, Integer topK, String companyId);  // ← added companyId
 
     String filterByCutOffMarks(String driveId, Integer roundNo, Double cutOffMarks, String companyId);  // ← added companyId
+    Integer countFilterByCutOffMarks(String driveId, Integer roundNo,Double cutOffMarks, String companyId);
 }
