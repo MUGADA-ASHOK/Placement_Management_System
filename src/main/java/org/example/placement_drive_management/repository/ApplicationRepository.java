@@ -1,7 +1,9 @@
 package org.example.placement_drive_management.repository;
 
+import jakarta.transaction.Transactional;
 import org.example.placement_drive_management.entity.Applications;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,4 +24,8 @@ public interface ApplicationRepository extends JpaRepository<Applications, Long>
     List<Applications> findByDrive_DriveIdAndStatus(String driveId, String status);
     // All applications for a student filtered by status
     List<Applications> findByStudent_RollNoAndStatus(String rollNo, String status);
+
+    @Modifying
+    @Transactional
+    void deleteByDrive_DriveId(String driveId);
 }

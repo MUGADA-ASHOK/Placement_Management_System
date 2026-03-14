@@ -24,9 +24,11 @@ public class RegisterStudentRequest {
     @Pattern(
             regexp = "^[A-Za-z0-9._%+-]+@anits\\.edu\\.in$",
             message = "Enter a valid college email (@anits.edu.in)"
+            
     )
     private String email;
-
+    @Size(min = 10, max = 10)
+    private String mobileNo;
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;

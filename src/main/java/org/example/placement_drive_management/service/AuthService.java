@@ -46,6 +46,7 @@ public class AuthService {
         student.setName(request.getName());
         student.setSurname(request.getSurname());
         student.setEmail(request.getEmail());
+        student.setMobileNo(request.getMobileNo());
         student.setPassword(passwordEncoder.encode(request.getPassword()));
         student.setRole(Role.ROLE_STUDENT);
 

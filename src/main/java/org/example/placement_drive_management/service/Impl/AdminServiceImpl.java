@@ -10,7 +10,9 @@ import org.example.placement_drive_management.repository.*;
 import org.example.placement_drive_management.service.AdminService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +27,20 @@ public class AdminServiceImpl implements AdminService {
     private DriveRepository driveRepository;
     private EligibilityRepository eligibilityRepository;
     private DriveRoundRepository driveRoundRepository;
+    private ApplicationRoundRepository applicationRoundRepository;
     private ApplicationRepository applicationRepository;
+
+    public void updateEligibilityFields(Eligibility eligibility,EligibilityDto dto) {
+        eligibility.setMinimumCgpa(dto.getMinimumCgpa());
+        eligibility.setMaxActiveBacklogs(dto.getMaxActiveBacklogs());
+        eligibility.setAllowedBranch(dto.getAllowedBranch());
+        eligibility.setPassingYear(dto.getPassingYear());
+        eligibility.setGender(dto.getGender());
+        eligibility.setHasHistoryBacklogs(dto.getHasHistoryBacklogs());
+    }
     @Override
-    public List<StudentDto> getAllStudents() {
-        return studentRepository.findAll().stream().map((students  )-> StudentMapper.maptoStudentDto(students)).collect(Collectors.toList());
+    public List<StudentResponseDto> getAllStudents() {
+        return studentRepository.findAll().stream().map((students  )-> StudentMapper.maptoStudentResponseDto(students)).collect(Collectors.toList());
     }
     @Override
     public List<StudentProfileDto> getAllProfiles() {
@@ -41,23 +53,24 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public DriveDto createDrive(DriveDto driveDto) {
+    public String createDrive(DriveDto driveDto) {
         if(driveRepository.existsByDriveId(driveDto.getDriveId())) {
-            return driveDto;
+            return "drive already exists";
         }
         Drive newdrive=DriveMapper.maptoDrive(driveDto);
         Company company=companyRepository.findByCompanyId(driveDto.getCompanyId()).orElseThrow(()->new ResourceNotFoundException("Company with id"+driveDto.getCompanyId()+" need to be uploaded"));
         newdrive.setCompany(company);
+        newdrive.setMaxRounds(driveDto.getMaxRounds());
         driveRepository.save(newdrive);
-        return DriveMapper.maptoDriveDto(newdrive);
+        return "drive created ";
     }
 
 
     @Override
     public String createEligibility(EligibilityDto eligibilityDto) {
         Drive drive = driveRepository.findByDriveId(eligibilityDto.getDriveId()).orElseThrow(()-> new ResourceNotFoundException("drive not found"));
-        if(driveRepository.existsByDriveId(drive.getDriveId())) {
-            return "drive already exists";
+        if(!driveRepository.existsByDriveId(drive.getDriveId())) {
+            return "drive not found";
         }
         Eligibility eligibility=new  Eligibility(
                 eligibilityDto.getId(),
@@ -76,31 +89,32 @@ public class AdminServiceImpl implements AdminService {
     }
     @Override
     public String updateEligibility(String driveId,EligibilityDto eligibilityDto) {
-            Drive drive=driveRepository.findByDriveId(driveId).orElseThrow(() -> new ResourceNotFoundException("Drive not found"));
-            if (!drive.getRounds().isEmpty()) {
-                return "Eligibility cannot be updated once rounds are added";
-            }
-            Eligibility updatedEligibility=eligibilityRepository.findByDrive_DriveId(driveId).orElseThrow(() -> new ResourceNotFoundException("Eligibility not found"));
-            updatedEligibility.setMinimumCgpa(eligibilityDto.getMinimumCgpa());
-            updatedEligibility.setMaxActiveBacklogs(eligibilityDto.getMaxActiveBacklogs());
-            updatedEligibility.setAllowedBranch(eligibilityDto.getAllowedBranch());
-            updatedEligibility.setPassingYear(eligibilityDto.getPassingYear());
-            updatedEligibility.setGender(eligibilityDto.getGender());
-            updatedEligibility.setHasHistoryBacklogs(eligibilityDto.getHasHistoryBacklogs());
-            eligibilityRepository.save(updatedEligibility);
-            drive.setEligibility(updatedEligibility);
-            if(!drive.getRounds().isEmpty()){
-                List<Applications> applications=drive.getApplications();
-                for(Applications application:applications){
-                    applicationRepository.delete(application);
-                }
-                if(drive.getIsActive()) {
-                    drive.setIsActive(false);
-                    driveRepository.save(drive);
-                    return publishDrivesToEligibleStudents(driveId);
-                }
-            }
-            return "Successfully updated Eligibility";
+        Drive drive = driveRepository.findByDriveId(driveId)
+                .orElseThrow(() -> new ResourceNotFoundException("Drive not found"));
+
+        if (!drive.getRounds().isEmpty()) {
+            return "Eligibility cannot be updated once rounds are added";
+        }
+
+        Eligibility eligibility = eligibilityRepository
+                .findByDrive_DriveId(driveId)
+                .orElseThrow(() -> new ResourceNotFoundException("Eligibility not found"));
+
+        updateEligibilityFields(eligibility, eligibilityDto);
+
+        eligibilityRepository.save(eligibility);
+
+        if (Boolean.TRUE.equals(drive.getIsActive())) {
+
+            applicationRepository.deleteByDrive_DriveId(driveId);
+
+            drive.setIsActive(false);
+            driveRepository.save(drive);
+
+            return publishDrivesToEligibleStudents(driveId);
+        }
+
+        return "Successfully updated Eligibility";
         }
 
     @Override
@@ -211,11 +225,26 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public String extendDriveApplication(String driveId, LocalDate localDate) {
         Drive drive=driveRepository.findByDriveId(driveId).orElseThrow(() -> new ResourceNotFoundException("drive not found"));
-        if(drive.getRounds().size()==0 && localDate.isBefore(drive.getRegistrationEndDate())){
+        if(drive.getRounds().isEmpty() && localDate.isBefore(drive.getRegistrationEndDate())){
             drive.setRegistrationEndDate(localDate);
             return "Registration date has been extended to "+localDate;
         }
         return "You cannot update the Registration Date now";
     }
 
+    @Override
+    public String deleteDrive(String driveId){
+
+        Drive drive = driveRepository.findByDriveId(driveId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Drive with driveId " + driveId + " is not found"));
+
+        if(Boolean.TRUE.equals(drive.getIsActive()) && !drive.getRounds().isEmpty()){
+            return "Cannot delete drive because rounds already exist";
+        }
+
+        driveRepository.delete(drive);
+
+        return "Successfully Deleted Drive with ID " + driveId;
+    }
 }

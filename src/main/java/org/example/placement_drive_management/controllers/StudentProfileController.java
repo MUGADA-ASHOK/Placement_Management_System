@@ -32,31 +32,30 @@ public class StudentProfileController {
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 
-    @PutMapping("/update/{rollNo}")
+    @PutMapping("/update")
     @PreAuthorize("hasAuthority('ROLE_STUDENT')")
     public ResponseEntity<String> updateStudentProfile(
-            @PathVariable String rollNo,
             @RequestBody StudentProfileDto studentProfileDto,
             @AuthenticationPrincipal Student student) {
-        String message = studentProfileService.updateStudentProfile(rollNo, studentProfileDto,student.getRollNo());
+        String message = studentProfileService.updateStudentProfile(studentProfileDto,student.getRollNo());
         return ResponseEntity.ok(message);
     }
 
-    @GetMapping("/{rollNo}")
+    @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_STUDENT', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<StudentProfileDto> getStudentProfile(@PathVariable String rollNo,@AuthenticationPrincipal Student student) {
-        return ResponseEntity.ok(studentProfileService.getStudentProfile(rollNo,student.getRollNo()));
+    public ResponseEntity<StudentProfileDto> getStudentProfile(@AuthenticationPrincipal Student student) {
+        return ResponseEntity.ok(studentProfileService.getStudentProfile(student.getRollNo()));
     }
 
-    @GetMapping("/allApplications/{rollNo}")
+    @GetMapping("/allApplications")
     @PreAuthorize("hasAnyAuthority('ROLE_STUDENT', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<ApplicationsDto>> getAllApplicationsOfStudent(
-            @PathVariable("rollNo") String studentRollNo,
+
             @AuthenticationPrincipal Student student) {
-        return ResponseEntity.ok(studentProfileService.getAllApplicationsForStudent(studentRollNo,student.getRollNo()));
+        return ResponseEntity.ok(studentProfileService.getAllApplicationsForStudent(student.getRollNo()));
     }
 
-    @PostMapping("/applyDrive/{driveId}")
+    @PutMapping("/applyDrive/{driveId}")
     @PreAuthorize("hasAuthority('ROLE_STUDENT')")
     public ResponseEntity<String> applyDrive(@PathVariable String driveId, @AuthenticationPrincipal Student student) {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentProfileService.applyDrive(driveId,student.getRollNo()));

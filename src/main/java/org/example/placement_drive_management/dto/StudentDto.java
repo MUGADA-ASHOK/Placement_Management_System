@@ -14,5 +14,6 @@ public class StudentDto {
     String name;
     String surname;
     String email;
+    String mobileNo;
     String password;
 }

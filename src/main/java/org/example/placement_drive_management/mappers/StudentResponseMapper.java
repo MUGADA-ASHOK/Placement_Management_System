@@ -5,11 +5,12 @@ import org.example.placement_drive_management.entity.Student;
 
 public class StudentResponseMapper {
     public static StudentResponseDto maptoStudentResponseDto(Student student) {
-        return new StudentResponseDto(
-                student.getRollNo(),
-                student.getName(),
-                student.getSurname(),
-                student.getEmail()
-        );
+        StudentResponseDto studentResponseDto = new StudentResponseDto();
+        studentResponseDto.setRollNo(student.getRollNo());
+        studentResponseDto.setName(student.getName());
+        studentResponseDto.setSurname(student.getSurname());
+        studentResponseDto.setEmail(student.getEmail());
+        studentResponseDto.setMobileNo(student.getMobileNo());
+        return studentResponseDto;
     }
 }

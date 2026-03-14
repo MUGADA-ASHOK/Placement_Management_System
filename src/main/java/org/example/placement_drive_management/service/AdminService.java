@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Optional;
 @Service
 public interface AdminService {
-    List<StudentDto> getAllStudents();
+    List<StudentResponseDto> getAllStudents();
     StudentProfileDto getStudentProfileByRollNo(String rollNo);
-    DriveDto createDrive(DriveDto driveDto);
+    String createDrive(DriveDto driveDto);
     String createEligibility(EligibilityDto eligibilityDto);
     String updateEligibility(String driveId,EligibilityDto eligibilityDto);
     List<StudentProfileDto> getAllProfiles();
@@ -32,4 +32,5 @@ public interface AdminService {
     List<DriveDto>viewAllActiveDrives();
     String removeDrive(String driveId);
     String extendDriveApplication(String driveId, LocalDate localDate);
+    String deleteDrive(String driveId);
 }

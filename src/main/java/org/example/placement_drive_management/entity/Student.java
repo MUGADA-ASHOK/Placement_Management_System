@@ -1,10 +1,7 @@
 package org.example.placement_drive_management.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +32,8 @@ public class Student implements UserDetails {
     @NotNull
     @Column(length=15)
     private String surname;
+    @Size(min=10, max=10)
+    private String mobileNo;
     @NotNull
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@anits\\.edu\\.in$",message = "Enter the valid college email")
     @Column(length=100)

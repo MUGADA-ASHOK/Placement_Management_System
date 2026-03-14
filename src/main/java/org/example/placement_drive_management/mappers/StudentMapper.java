@@ -2,6 +2,7 @@ package org.example.placement_drive_management.mappers;
 
 import org.example.placement_drive_management.dto.StudentDto;
 import org.example.placement_drive_management.dto.StudentProfileDto;
+import org.example.placement_drive_management.dto.StudentResponseDto;
 import org.example.placement_drive_management.entity.Student;
 import org.example.placement_drive_management.enums.Role;
 
@@ -13,6 +14,7 @@ public class StudentMapper {
                 studentDto.getName(),
                 studentDto.getSurname(),
                 studentDto.getEmail(),
+                studentDto.getMobileNo(),
                 studentDto.getPassword(),
                 null,
                 Role.ROLE_STUDENT
@@ -26,7 +28,17 @@ public class StudentMapper {
                 student.getName(),
                 student.getSurname(),
                 student.getEmail(),
+                student.getMobileNo(),
                 student.getPassword()
+        );
+    }
+    public static StudentResponseDto maptoStudentResponseDto(Student student){
+        return new StudentResponseDto(
+                student.getRollNo(),
+                student.getEmail(),
+                student.getName(),
+                student.getSurname(),
+                student.getMobileNo()
         );
     }
 }

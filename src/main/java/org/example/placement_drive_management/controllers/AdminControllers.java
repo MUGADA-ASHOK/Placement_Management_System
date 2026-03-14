@@ -23,7 +23,7 @@ public class AdminControllers {
 
     @GetMapping("/allStudents")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<List<StudentDto>> getAllStudents() {
+    public ResponseEntity<List<StudentResponseDto>> getAllStudents() {
         return ResponseEntity.ok(adminService.getAllStudents());
     }
 
@@ -41,7 +41,7 @@ public class AdminControllers {
 
     @PostMapping("/company/addDrive")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<DriveDto> addDrive(@RequestBody DriveDto driveDto) {
+    public ResponseEntity<String> addDrive(@RequestBody DriveDto driveDto) {
         return ResponseEntity.ok(adminService.createDrive(driveDto));
     }
 
@@ -114,6 +114,11 @@ public class AdminControllers {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public  ResponseEntity<List<ApplicationRoundDto>> getApplicantsForDriveRound(@PathVariable String driveId,@PathVariable Integer roundNo) {
         return ResponseEntity.ok(adminService.getApplicantsForDriveRound(driveId,roundNo));
+    }
+    @GetMapping("/deleteDrive/{driveId}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+    public ResponseEntity<String> deleteDrive(@PathVariable("driveId") String driveId) {
+        return ResponseEntity.ok(adminService.deleteDrive(driveId));
     }
 
 }
