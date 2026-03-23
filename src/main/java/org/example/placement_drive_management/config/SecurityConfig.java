@@ -34,6 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // ── Disable CSRF — we are stateless (JWT), no sessions ────────
+                .cors(cors -> {})
                 .csrf(AbstractHttpConfigurer::disable)
 
                 // ── Custom JSON error responses ───────────────────────────────

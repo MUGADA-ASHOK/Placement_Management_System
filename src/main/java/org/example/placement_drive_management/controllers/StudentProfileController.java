@@ -76,7 +76,7 @@ public class StudentProfileController {
     @PostMapping("/uploadResume")
     @PreAuthorize("hasAuthority('ROLE_STUDENT')")
     public ResponseEntity<String> uploadResume(
-            @RequestParam("file") MultipartFile file,
+            @RequestParam("resume") MultipartFile file,
             @AuthenticationPrincipal Student student) {
 
         return ResponseEntity.ok(
