@@ -28,7 +28,7 @@ public interface AdminService {
 
     List<ApplicationsDto> getAllApplications(String driveId);
 
-    List<ApplicationRoundDto> getApplicantsForDriveRound(String driveId, Integer roundNo);  // ← added companyId
+    List<ApplicationRoundProjection> getApplicantsForDriveRound(String driveId, Integer roundNo);  // ← added companyId
     List<DriveDto>viewAllActiveDrives();
     String removeDrive(String driveId);
     String extendDriveApplication(String driveId, LocalDate localDate);

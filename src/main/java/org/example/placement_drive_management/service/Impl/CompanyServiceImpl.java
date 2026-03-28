@@ -2,10 +2,7 @@ package org.example.placement_drive_management.service.Impl;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.example.placement_drive_management.dto.ApplicationRoundDto;
-import org.example.placement_drive_management.dto.ApplicationsDto;
-import org.example.placement_drive_management.dto.DriveDto;
-import org.example.placement_drive_management.dto.DriveRoundDto;
+import org.example.placement_drive_management.dto.*;
 import org.example.placement_drive_management.entity.*;
 import org.example.placement_drive_management.exceptions.ResourceNotFoundException;
 import org.example.placement_drive_management.exceptions.UnauthorizedAccessException;
@@ -14,6 +11,7 @@ import org.example.placement_drive_management.mappers.ApplicationsMapper;
 import org.example.placement_drive_management.mappers.DriveMapper;
 import org.example.placement_drive_management.mappers.DriveRoundMapper;
 import org.example.placement_drive_management.repository.*;
+import org.example.placement_drive_management.service.ApplicationRoundProjection;
 import org.example.placement_drive_management.service.CompanyService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -126,17 +124,13 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<ApplicationRoundDto> getApplicantsForDriveRound(
+    public List<ApplicationRoundProjection> getApplicantsForDriveRound(
             String driveId, Integer roundNo, String companyId) {
         verifyDriveOwnership(driveId, companyId);
-        List<ApplicationRound> roundEntries = applicationRoundRepository
-                .findDetailedRoundApplicants(driveId, roundNo);
-        if (roundEntries.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return roundEntries.stream()
-                .map(ApplicationRoundMapper::maptoApplicationRoundDto)
-                .collect(Collectors.toList());
+        List<ApplicationRoundProjection> roundEntries = applicationRoundRepository
+                .findApplicantsProjected(driveId, roundNo);
+        return roundEntries;
+
     }
 
     @Override

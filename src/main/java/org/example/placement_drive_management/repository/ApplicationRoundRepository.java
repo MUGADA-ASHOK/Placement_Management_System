@@ -2,6 +2,7 @@ package org.example.placement_drive_management.repository;
 
 import org.example.placement_drive_management.entity.ApplicationRound;
 import org.example.placement_drive_management.entity.Applications;
+import org.example.placement_drive_management.service.ApplicationRoundProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,18 +14,29 @@ public interface ApplicationRoundRepository extends JpaRepository<ApplicationRou
 
 
     @Query("""
-    SELECT ar
-    FROM applicationRound ar
-    JOIN FETCH ar.application a
-    JOIN FETCH a.student
-    JOIN FETCH ar.driveRound dr
+    SELECT 
+        a.id as applicationId,
+        s.rollNo as studentRollNo,
+        s.name as studentName,
+        sp.department as department,
+        sp.currentCgpa as currentCgpa,
+        s.mobileNo as mobileNo,
+        s.email as email,
+        ar.status as status,
+        ar.score as score,
+        ar.feedback as feedback,
+        sp.resumeUrl as resume
+    FROM ApplicationRound ar
+    JOIN ar.application a
+    JOIN a.student s
+    JOIN a.studentProfile sp
+    JOIN ar.driveRound dr
     WHERE dr.drive.driveId = :driveId
-    AND dr.roundNumber = :roundNumber
+    AND dr.roundNumber = :roundNo
 """)
-    List<ApplicationRound> findDetailedRoundApplicants(
+    List<ApplicationRoundProjection> findApplicantsProjected(
             @Param("driveId") String driveId,
-            @Param("roundNumber") Integer roundNumber
-    );
+            @Param("roundNo") Integer roundNo);
 
 
     List<ApplicationRound> findByDriveRound_RoundNumber(Integer roundNumber);

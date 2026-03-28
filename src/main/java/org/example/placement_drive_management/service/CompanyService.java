@@ -1,9 +1,6 @@
 package org.example.placement_drive_management.service;
 
-import org.example.placement_drive_management.dto.ApplicationRoundDto;
-import org.example.placement_drive_management.dto.ApplicationsDto;
-import org.example.placement_drive_management.dto.DriveDto;
-import org.example.placement_drive_management.dto.DriveRoundDto;
+import org.example.placement_drive_management.dto.*;
 
 import java.util.List;
 
@@ -17,7 +14,7 @@ public interface CompanyService {
 
     List<ApplicationsDto> getAllApplications(String driveId, String companyId);
 
-    List<ApplicationRoundDto> getApplicantsForDriveRound(String driveId, Integer roundNo, String companyId);  // ← added companyId
+    List<ApplicationRoundProjection> getApplicantsForDriveRound(String driveId, Integer roundNo, String companyId);  // ← added companyId
 
     String publishScoreForDriveRound(String driveId, String rollNo, Integer roundNo, Double score, String companyId);  // ← added companyId
 

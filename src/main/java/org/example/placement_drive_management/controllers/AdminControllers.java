@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.example.placement_drive_management.dto.*;
 import org.example.placement_drive_management.dto.auth.ApiResponse;
 import org.example.placement_drive_management.service.AdminService;
+import org.example.placement_drive_management.service.ApplicationRoundProjection;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -101,18 +102,18 @@ public class AdminControllers {
     }
     @GetMapping("/getAllDriveRounds/{driveId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
-    public ResponseEntity<List<DriveRoundDto>> getAllRounds(String driveId){
+    public ResponseEntity<List<DriveRoundDto>> getAllRounds(@PathVariable String driveId){
         return ResponseEntity.ok(adminService.getAllRounds(driveId));
     }
 
     @GetMapping("/getAllApplications/{driveId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
-    public ResponseEntity<List<ApplicationsDto>>  getAllApplications(String driveId){
+    public ResponseEntity<List<ApplicationsDto>>  getAllApplications(@PathVariable  String driveId){
         return ResponseEntity.ok(adminService.getAllApplications(driveId));
     }
-    @GetMapping("/ getApplicantsForDriveRound/{driveId}/{roundNo}")
+    @GetMapping("/getApplicantsForDriveRound/{driveId}/{roundNo}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
-    public  ResponseEntity<List<ApplicationRoundDto>> getApplicantsForDriveRound(@PathVariable String driveId,@PathVariable Integer roundNo) {
+    public  ResponseEntity<List<ApplicationRoundProjection>> getApplicantsForDriveRound(@PathVariable String driveId, @PathVariable Integer roundNo) {
         return ResponseEntity.ok(adminService.getApplicantsForDriveRound(driveId,roundNo));
     }
     @GetMapping("/deleteDrive/{driveId}")

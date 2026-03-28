@@ -1,12 +1,10 @@
 package org.example.placement_drive_management.controllers;
 
 import lombok.AllArgsConstructor;
-import org.example.placement_drive_management.dto.ApplicationRoundDto;
-import org.example.placement_drive_management.dto.ApplicationsDto;
-import org.example.placement_drive_management.dto.DriveDto;
-import org.example.placement_drive_management.dto.DriveRoundDto;
+import org.example.placement_drive_management.dto.*;
 import org.example.placement_drive_management.dto.auth.ApiResponse;
 import org.example.placement_drive_management.entity.Company;
+import org.example.placement_drive_management.service.ApplicationRoundProjection;
 import org.example.placement_drive_management.service.CompanyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,7 +54,7 @@ public class CompanyController {
 
     @GetMapping("/allApplications/{driveId}/{roundNumber}")
     @PreAuthorize("hasAuthority('ROLE_COMPANY')")
-    public ResponseEntity<ApiResponse<List<ApplicationRoundDto>>> getAllApplicationsByRound(
+    public ResponseEntity<ApiResponse<List<ApplicationRoundProjection>>> getAllApplicationsByRound(
             @PathVariable String driveId,
             @PathVariable Integer roundNumber,
             @AuthenticationPrincipal Company company) {

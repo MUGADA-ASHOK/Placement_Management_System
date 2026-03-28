@@ -8,6 +8,7 @@ import org.example.placement_drive_management.exceptions.ResourceNotFoundExcepti
 import org.example.placement_drive_management.mappers.*;
 import org.example.placement_drive_management.repository.*;
 import org.example.placement_drive_management.service.AdminService;
+import org.example.placement_drive_management.service.ApplicationRoundProjection;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -196,15 +197,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<ApplicationRoundDto> getApplicantsForDriveRound(String driveId, Integer roundNo) {
+    public List<ApplicationRoundProjection> getApplicantsForDriveRound(String driveId, Integer roundNo) {
 
-        List<ApplicationRound> roundEntries = applicationRoundRepository.findDetailedRoundApplicants(driveId, roundNo);
-        if (roundEntries.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return roundEntries.stream()
-                .map(ApplicationRoundMapper::maptoApplicationRoundDto)
-                .collect(Collectors.toList());
+        List<ApplicationRoundProjection> roundEntries = applicationRoundRepository.findApplicantsProjected(driveId, roundNo);
+        return roundEntries;
     }
 
     @Override
